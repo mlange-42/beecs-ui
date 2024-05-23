@@ -3,17 +3,17 @@ package sys
 import (
 	"github.com/mlange-42/arche/ecs"
 	"github.com/mlange-42/arche/generic"
-	"github.com/mlange-42/beecs-ui/game/res"
+	"github.com/mlange-42/beecs-ui/game/ui"
 )
 
 // UpdateUI system.
 type UpdateUI struct {
-	ui generic.Resource[res.UI]
+	ui generic.Resource[ui.UI]
 }
 
 // Initialize the system
 func (s *UpdateUI) Initialize(world *ecs.World) {
-	s.ui = generic.NewResource[res.UI](world)
+	s.ui = generic.NewResource[ui.UI](world)
 }
 
 // Update the system

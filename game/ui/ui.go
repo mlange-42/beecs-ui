@@ -1,17 +1,18 @@
-package res
+package ui
 
 import (
 	"github.com/ebitenui/ebitenui"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/mlange-42/arche/ecs"
+	"github.com/mlange-42/beecs-ui/game/res"
 )
 
 // UI resource.Represents the complete game UI.
 type UI struct {
 	ui      *ebitenui.UI
-	fonts   *Fonts
-	sprites *Sprites
+	fonts   *res.Fonts
+	sprites *res.Sprites
 }
 
 func (ui *UI) UI() *ebitenui.UI {
@@ -26,7 +27,7 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 	ui.UI().Draw(screen)
 }
 
-func NewUI(world *ecs.World, fonts *Fonts, sprites *Sprites) UI {
+func New(world *ecs.World, fonts *res.Fonts, sprites *res.Sprites) UI {
 	ui := UI{
 		fonts:   fonts,
 		sprites: sprites,

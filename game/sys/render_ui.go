@@ -4,17 +4,18 @@ import (
 	"github.com/mlange-42/arche/ecs"
 	"github.com/mlange-42/arche/generic"
 	"github.com/mlange-42/beecs-ui/game/res"
+	"github.com/mlange-42/beecs-ui/game/ui"
 )
 
 // RenderUI is a system to render the user interface.
 type RenderUI struct {
 	screen generic.Resource[res.Screen]
-	ui     generic.Resource[res.UI]
+	ui     generic.Resource[ui.UI]
 }
 
 // InitializeUI the system
 func (s *RenderUI) InitializeUI(world *ecs.World) {
-	s.ui = generic.NewResource[res.UI](world)
+	s.ui = generic.NewResource[ui.UI](world)
 	s.screen = generic.NewResource[res.Screen](world)
 }
 
