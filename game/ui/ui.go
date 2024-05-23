@@ -91,7 +91,7 @@ func (ui *UI) createTopBar() *widget.Container {
 				Position: widget.RowLayoutPositionStart,
 				Stretch:  true,
 			}),
-			widget.WidgetOpts.MinSize(40, 10),
+			widget.WidgetOpts.MinSize(200, 10),
 		),
 	)
 
