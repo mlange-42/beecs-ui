@@ -1,0 +1,8 @@
+*.exe
+*.svg
+*.wasm
+/save/
+/maps/
+/user/
+
+.idea
