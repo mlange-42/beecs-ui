@@ -14,10 +14,12 @@ import (
 // GameControls system.
 type GameControls struct {
 	PauseKey      ebiten.Key
+	StepKey       ebiten.Key
 	SlowerKey     rune
 	FasterKey     rune
 	FullscreenKey ebiten.Key
 
+	time      generic.Resource[res.GameTick]
 	speed     generic.Resource[res.GameSpeed]
 	update    generic.Resource[res.UpdateInterval]
 	prevSpeed int8
@@ -27,6 +29,7 @@ type GameControls struct {
 
 // Initialize the system
 func (s *GameControls) Initialize(world *ecs.World) {
+	s.time = generic.NewResource[res.GameTick](world)
 	s.speed = generic.NewResource[res.GameSpeed](world)
 	s.update = generic.NewResource[res.UpdateInterval](world)
 
@@ -38,6 +41,7 @@ func (s *GameControls) Initialize(world *ecs.World) {
 
 // Update the system
 func (s *GameControls) Update(world *ecs.World) {
+	time := s.time.Get()
 	speed := s.speed.Get()
 	update := s.update.Get()
 
@@ -46,6 +50,23 @@ func (s *GameControls) Update(world *ecs.World) {
 	}
 	if inpututil.IsKeyJustPressed(s.PauseKey) {
 		speed.Pause = !speed.Pause
+		speed.NextPause = -1
+	}
+	if inpututil.IsKeyJustPressed(s.StepKey) {
+		steps := 1
+		if ebiten.IsKeyPressed(ebiten.KeyControl) {
+			steps = 30
+			if ebiten.IsKeyPressed(ebiten.KeyAlt) {
+				steps = 365
+
+			}
+		}
+		speed.Pause = false
+		speed.NextPause = time.Tick + int64(steps)
+	}
+
+	if speed.NextPause == time.Tick {
+		speed.Pause = true
 	}
 
 	s.inputChars = ebiten.AppendInputChars(s.inputChars)

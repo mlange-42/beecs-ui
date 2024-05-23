@@ -10,6 +10,8 @@ type GameSpeed struct {
 	MinSpeed int8
 	// Maximum game speed, as an exponent for base 2.
 	MaxSpeed int8
+	// Next tick to pause
+	NextPause int64
 }
 
 // GameTick resource.

@@ -11,7 +11,9 @@ import (
 	"golang.org/x/image/font/sfnt"
 )
 
-const fontFile = "WorkSans-Regular.ttf"
+const fontFile = "SourceCodePro-Regular.ttf"
+
+const fontSize = 18
 
 // Fonts resource for access to UI fonts.
 type Fonts struct {
@@ -28,7 +30,7 @@ func NewFonts(fSys fs.FS, dir string) Fonts {
 		log.Fatal(err)
 	}
 
-	defaultFace, err := makeSize(tt, 22)
+	defaultFace, err := makeSize(tt, fontSize)
 	if err != nil {
 		log.Fatal(err)
 	}
