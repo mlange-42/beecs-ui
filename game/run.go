@@ -46,7 +46,7 @@ func initGame(g *Game) error {
 
 	ecs.AddResource(&g.Model.World, &res.GameSpeed{
 		MinSpeed: -2,
-		MaxSpeed: 3,
+		MaxSpeed: 4,
 	})
 
 	ecs.AddResource(&g.Model.World, &res.GameTick{})
