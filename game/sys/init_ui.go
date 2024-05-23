@@ -8,12 +8,19 @@ import (
 
 // InitUI system.
 type InitUI struct {
-	ui ui.UI
+	ResetFn func()
+	ui      ui.UI
 }
 
 // Initialize the system
 func (s *InitUI) Initialize(world *ecs.World) {
-	s.ui = ui.New(world, ecs.GetResource[res.Fonts](world), ecs.GetResource[res.Sprites](world))
+	s.ui = ui.New(world,
+		ecs.GetResource[res.GameTick](world),
+		ecs.GetResource[res.Fonts](world),
+		ecs.GetResource[res.Sprites](world),
+		ecs.GetResource[res.GameSpeed](world),
+		s.ResetFn,
+	)
 
 	ecs.AddResource(world, &s.ui)
 }

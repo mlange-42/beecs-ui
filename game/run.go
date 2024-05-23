@@ -30,6 +30,12 @@ func Run(data embed.FS) {
 	}
 }
 
+func run(g *Game) {
+	if err := initGame(g); err != nil {
+		panic(err)
+	}
+}
+
 func initGame(g *Game) error {
 	ebiten.SetVsyncEnabled(true)
 
@@ -58,8 +64,11 @@ func initGame(g *Game) error {
 	fonts := res.NewFonts(GameData, "data/fonts")
 	ecs.AddResource(&g.Model.World, &fonts)
 
-	g.Model.AddSystem(&sys.InitUI{})
-	g.Model.AddSystem(&sys.Tick{})
+	g.Model.AddSystem(&sys.InitUI{
+		ResetFn: func() {
+			run(g)
+		},
+	})
 	g.Model.AddSystem(&sys.UpdateUI{})
 
 	g.Model.AddSystem(&sys.GameControls{
@@ -69,6 +78,7 @@ func initGame(g *Game) error {
 		FullscreenKey: ebiten.KeyF11,
 	})
 	g.Model.AddUISystem(&sys.RenderUI{})
+	g.Model.AddSystem(&sys.Tick{})
 
 	g.Model.Initialize()
 

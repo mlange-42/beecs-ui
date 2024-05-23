@@ -11,10 +11,15 @@ import (
 // UI resource.Represents the complete game UI.
 type UI struct {
 	ui      *ebitenui.UI
+	time    *res.GameTick
 	fonts   *res.Fonts
 	sprites *res.Sprites
+	speed   *res.GameSpeed
 
-	InfoLabel *widget.Text
+	InfoLabel   *widget.Text
+	PauseButton *widget.Button
+
+	resetFn func()
 }
 
 func (ui *UI) UI() *ebitenui.UI {
@@ -29,10 +34,13 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 	ui.UI().Draw(screen)
 }
 
-func New(world *ecs.World, fonts *res.Fonts, sprites *res.Sprites) UI {
+func New(world *ecs.World, time *res.GameTick, fonts *res.Fonts, sprites *res.Sprites, speed *res.GameSpeed, resetFn func()) UI {
 	ui := UI{
+		time:    time,
 		fonts:   fonts,
 		sprites: sprites,
+		speed:   speed,
+		resetFn: resetFn,
 	}
 
 	rootContainer := widget.NewContainer(
@@ -51,7 +59,7 @@ func New(world *ecs.World, fonts *res.Fonts, sprites *res.Sprites) UI {
 
 func (ui *UI) createUI() *widget.Container {
 	root := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
+		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		gridLayout([]bool{true}, []bool{false, true}, 4, 0),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.AnchorLayoutData{
@@ -71,7 +79,7 @@ func (ui *UI) createUI() *widget.Container {
 
 func (ui *UI) createTopBar() *widget.Container {
 	root := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
+		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		gridLayout([]bool{true, false}, []bool{true}, 4, 0),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
@@ -79,17 +87,33 @@ func (ui *UI) createTopBar() *widget.Container {
 		),
 	)
 
+	root.AddChild(ui.createTopBarLabels())
+	root.AddChild(ui.createTopBarButtons())
+
+	return root
+}
+
+func (ui *UI) createTopBarLabels() *widget.Container {
 	labels := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
+		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		rowLayout(widget.DirectionHorizontal),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
 			widget.WidgetOpts.MinSize(200, 10),
 		),
 	)
+	ui.InfoLabel = widget.NewText(
+		widget.TextOpts.Text("", ui.fonts.Default, ui.sprites.TextColor),
+		widget.TextOpts.Position(widget.TextPositionStart, widget.TextPositionCenter),
+	)
 
+	labels.AddChild(ui.InfoLabel)
+	return labels
+}
+
+func (ui *UI) createTopBarButtons() *widget.Container {
 	buttons := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
+		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		rowLayout(widget.DirectionHorizontal),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
@@ -97,17 +121,33 @@ func (ui *UI) createTopBar() *widget.Container {
 		),
 	)
 
-	ui.InfoLabel = widget.NewText(
-		widget.TextOpts.Text("", ui.fonts.Default, ui.sprites.TextColor),
-		widget.TextOpts.Position(widget.TextPositionStart, widget.TextPositionCenter),
-	)
+	resetButton := ui.button("<<", func(args *widget.ButtonClickedEventArgs) {
+		ui.resetFn()
+	})
 
-	labels.AddChild(ui.InfoLabel)
+	ui.PauseButton = ui.button(">>", func(args *widget.ButtonClickedEventArgs) {
+		ui.speed.Pause = !ui.speed.Pause
+		ui.speed.NextPause = -1
+	})
 
-	root.AddChild(labels)
-	root.AddChild(buttons)
+	stepButton := ui.button(">", func(args *widget.ButtonClickedEventArgs) {
+		ui.speed.Pause = !ui.speed.Pause
+		ui.speed.NextPause = ui.time.Tick + 1
+	})
 
-	return root
+	buttons.AddChild(resetButton)
+	buttons.AddChild(ui.PauseButton)
+	buttons.AddChild(stepButton)
+
+	return buttons
+}
+
+func (ui *UI) defaultButtonImage() *widget.ButtonImage {
+	return &widget.ButtonImage{
+		Idle:    ui.sprites.Background,
+		Hover:   ui.sprites.BackgroundHover,
+		Pressed: ui.sprites.BackgroundPressed,
+	}
 }
 
 func rowLayout(d widget.Direction) widget.ContainerOpt {
@@ -128,5 +168,16 @@ func gridLayout(hStretch []bool, vStretch []bool, space int, pad int) widget.Con
 			widget.GridLayoutOpts.Padding(widget.NewInsetsSimple(pad)),
 			widget.GridLayoutOpts.Spacing(space, space),
 		),
+	)
+}
+
+func (ui *UI) button(text string, handler func(args *widget.ButtonClickedEventArgs)) *widget.Button {
+	return widget.NewButton(
+		widget.ButtonOpts.Image(ui.defaultButtonImage()),
+		widget.ButtonOpts.Text(text, ui.fonts.Default, &widget.ButtonTextColor{
+			Idle: ui.sprites.TextColor,
+		}),
+		widget.ButtonOpts.TextPadding(widget.NewInsetsSimple(5)),
+		widget.ButtonOpts.ClickedHandler(handler),
 	)
 }
