@@ -13,6 +13,8 @@ type UI struct {
 	ui      *ebitenui.UI
 	fonts   *res.Fonts
 	sprites *res.Sprites
+
+	InfoLabel *widget.Text
 }
 
 func (ui *UI) UI() *ebitenui.UI {
@@ -50,13 +52,7 @@ func New(world *ecs.World, fonts *res.Fonts, sprites *res.Sprites) UI {
 func (ui *UI) createUI() *widget.Container {
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
-		widget.ContainerOpts.Layout(
-			widget.NewRowLayout(
-				widget.RowLayoutOpts.Direction(widget.DirectionVertical),
-				widget.RowLayoutOpts.Padding(widget.NewInsetsSimple(4)),
-				widget.RowLayoutOpts.Spacing(6),
-			),
-		),
+		rowLayout(widget.DirectionVertical),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.AnchorLayoutData{
 				HorizontalPosition: widget.AnchorLayoutPositionEnd,
@@ -68,5 +64,78 @@ func (ui *UI) createUI() *widget.Container {
 		),
 	)
 
+	root.AddChild(ui.createTopBar())
+
 	return root
+}
+
+func (ui *UI) createTopBar() *widget.Container {
+	root := widget.NewContainer(
+		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
+		rowLayout(widget.DirectionHorizontal),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Position:  widget.RowLayoutPositionStart,
+				Stretch:   true,
+				MaxHeight: 40,
+			}),
+			widget.WidgetOpts.MinSize(40, 10),
+		),
+	)
+
+	labels := widget.NewContainer(
+		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
+		rowLayout(widget.DirectionHorizontal),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Position: widget.RowLayoutPositionStart,
+				Stretch:  true,
+			}),
+			widget.WidgetOpts.MinSize(40, 10),
+		),
+	)
+
+	buttons := widget.NewContainer(
+		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
+		rowLayout(widget.DirectionHorizontal),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Position: widget.RowLayoutPositionStart,
+				Stretch:  true,
+			}),
+			widget.WidgetOpts.MinSize(40, 10),
+		),
+	)
+
+	ui.InfoLabel = widget.NewText(
+		widget.TextOpts.Text("", ui.fonts.Default, ui.sprites.TextColor),
+		widget.TextOpts.Position(widget.TextPositionStart, widget.TextPositionCenter),
+	)
+
+	labels.AddChild(ui.InfoLabel)
+
+	root.AddChild(labels)
+	root.AddChild(buttons)
+
+	return root
+}
+
+func rowLayout(d widget.Direction) widget.ContainerOpt {
+	return widget.ContainerOpts.Layout(
+		widget.NewRowLayout(
+			widget.RowLayoutOpts.Direction(d),
+			widget.RowLayoutOpts.Padding(widget.NewInsetsSimple(4)),
+			widget.RowLayoutOpts.Spacing(6),
+		),
+	)
+}
+
+func gridLayout(c int) widget.ContainerOpt {
+	return widget.ContainerOpts.Layout(
+		widget.NewGridLayout(
+			widget.GridLayoutOpts.Columns(c),
+			widget.GridLayoutOpts.Padding(widget.NewInsetsSimple(4)),
+			widget.GridLayoutOpts.Spacing(6, 6),
+		),
+	)
 }

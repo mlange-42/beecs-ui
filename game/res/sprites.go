@@ -1,6 +1,7 @@
 package res
 
 import (
+	"image/color"
 	"io/fs"
 	"log"
 	"path"
@@ -18,6 +19,8 @@ const (
 type Sprites struct {
 	Background          *ebiten.Image
 	BackgroundNineSlice *image.NineSlice
+
+	TextColor color.RGBA
 }
 
 // NewSprites creates a new Sprites resource from the given tileset folder.
@@ -31,5 +34,6 @@ func NewSprites(fSys fs.FS, dir string) Sprites {
 	return Sprites{
 		Background:          background,
 		BackgroundNineSlice: image.NewNineSliceSimple(background, w/4, w/2),
+		TextColor:           color.RGBA{0, 0, 0, 255},
 	}
 }
