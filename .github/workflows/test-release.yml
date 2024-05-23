@@ -104,7 +104,7 @@ jobs:
         run: GOOS=darwin GOARCH=amd64 CGO_ENABLED=1 go build .
       - name: Compress binaries
         run: |
-          zip -r beecs-ui.zip beecs-ui.app
+          zip -r beecs-ui.zip beecs-ui
         shell: bash
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
