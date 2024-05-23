@@ -14,6 +14,7 @@ import (
 // GameControls system.
 type GameControls struct {
 	PauseKey      ebiten.Key
+	StepKey       ebiten.Key
 	SlowerKey     rune
 	FasterKey     rune
 	FullscreenKey ebiten.Key
@@ -49,7 +50,21 @@ func (s *GameControls) Update(world *ecs.World) {
 	}
 	if inpututil.IsKeyJustPressed(s.PauseKey) {
 		speed.Pause = !speed.Pause
+		speed.NextPause = -1
 	}
+	if inpututil.IsKeyJustPressed(s.StepKey) {
+		steps := 1
+		if ebiten.IsKeyPressed(ebiten.KeyControl) {
+			steps = 30
+			if ebiten.IsKeyPressed(ebiten.KeyAlt) {
+				steps = 365
+
+			}
+		}
+		speed.Pause = false
+		speed.NextPause = time.Tick + int64(steps)
+	}
+
 	if speed.NextPause == time.Tick {
 		speed.Pause = true
 	}

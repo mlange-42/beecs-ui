@@ -73,6 +73,7 @@ func initGame(g *Game) error {
 
 	g.Model.AddSystem(&sys.GameControls{
 		PauseKey:      ebiten.KeySpace,
+		StepKey:       ebiten.KeyArrowRight,
 		SlowerKey:     '[',
 		FasterKey:     ']',
 		FullscreenKey: ebiten.KeyF11,

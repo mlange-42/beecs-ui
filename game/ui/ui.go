@@ -95,8 +95,8 @@ func (ui *UI) createTopBar() *widget.Container {
 
 func (ui *UI) createTopBarLabels() *widget.Container {
 	labels := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
-		rowLayout(widget.DirectionHorizontal),
+		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		rowLayout(widget.DirectionHorizontal, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
 			widget.WidgetOpts.MinSize(200, 10),
@@ -105,6 +105,9 @@ func (ui *UI) createTopBarLabels() *widget.Container {
 	ui.InfoLabel = widget.NewText(
 		widget.TextOpts.Text("", ui.fonts.Default, ui.sprites.TextColor),
 		widget.TextOpts.Position(widget.TextPositionStart, widget.TextPositionCenter),
+		widget.TextOpts.WidgetOpts(widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+			Position: widget.RowLayoutPositionCenter,
+		})),
 	)
 
 	labels.AddChild(ui.InfoLabel)
@@ -113,8 +116,8 @@ func (ui *UI) createTopBarLabels() *widget.Container {
 
 func (ui *UI) createTopBarButtons() *widget.Container {
 	buttons := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
-		rowLayout(widget.DirectionHorizontal),
+		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		rowLayout(widget.DirectionHorizontal, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
 			widget.WidgetOpts.MinSize(40, 10),
@@ -131,13 +134,25 @@ func (ui *UI) createTopBarButtons() *widget.Container {
 	})
 
 	stepButton := ui.button(">", func(args *widget.ButtonClickedEventArgs) {
-		ui.speed.Pause = !ui.speed.Pause
+		ui.speed.Pause = false
 		ui.speed.NextPause = ui.time.Tick + 1
+	})
+
+	stepMonthButton := ui.button(">M", func(args *widget.ButtonClickedEventArgs) {
+		ui.speed.Pause = false
+		ui.speed.NextPause = ui.time.Tick + 30
+	})
+
+	stepYearButton := ui.button(">Y", func(args *widget.ButtonClickedEventArgs) {
+		ui.speed.Pause = false
+		ui.speed.NextPause = ui.time.Tick + 365
 	})
 
 	buttons.AddChild(resetButton)
 	buttons.AddChild(ui.PauseButton)
 	buttons.AddChild(stepButton)
+	buttons.AddChild(stepMonthButton)
+	buttons.AddChild(stepYearButton)
 
 	return buttons
 }
@@ -150,12 +165,12 @@ func (ui *UI) defaultButtonImage() *widget.ButtonImage {
 	}
 }
 
-func rowLayout(d widget.Direction) widget.ContainerOpt {
+func rowLayout(d widget.Direction, space int) widget.ContainerOpt {
 	return widget.ContainerOpts.Layout(
 		widget.NewRowLayout(
 			widget.RowLayoutOpts.Direction(d),
-			widget.RowLayoutOpts.Padding(widget.NewInsetsSimple(4)),
-			widget.RowLayoutOpts.Spacing(6),
+			widget.RowLayoutOpts.Padding(widget.NewInsetsSimple(space)),
+			widget.RowLayoutOpts.Spacing(space),
 		),
 	)
 }
