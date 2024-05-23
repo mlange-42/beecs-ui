@@ -52,7 +52,7 @@ func New(world *ecs.World, fonts *res.Fonts, sprites *res.Sprites) UI {
 func (ui *UI) createUI() *widget.Container {
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
-		rowLayout(widget.DirectionVertical),
+		gridLayout([]bool{true}, []bool{false, true}, 4, 0),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.AnchorLayoutData{
 				HorizontalPosition: widget.AnchorLayoutPositionEnd,
@@ -72,13 +72,9 @@ func (ui *UI) createUI() *widget.Container {
 func (ui *UI) createTopBar() *widget.Container {
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
-		rowLayout(widget.DirectionHorizontal),
+		gridLayout([]bool{true, false}, []bool{true}, 4, 0),
 		widget.ContainerOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
-				Position:  widget.RowLayoutPositionStart,
-				Stretch:   true,
-				MaxHeight: 40,
-			}),
+			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
 			widget.WidgetOpts.MinSize(40, 10),
 		),
 	)
@@ -87,10 +83,7 @@ func (ui *UI) createTopBar() *widget.Container {
 		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
 		rowLayout(widget.DirectionHorizontal),
 		widget.ContainerOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
-				Position: widget.RowLayoutPositionStart,
-				Stretch:  true,
-			}),
+			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
 			widget.WidgetOpts.MinSize(200, 10),
 		),
 	)
@@ -99,10 +92,7 @@ func (ui *UI) createTopBar() *widget.Container {
 		widget.ContainerOpts.BackgroundImage(ui.sprites.BackgroundNineSlice),
 		rowLayout(widget.DirectionHorizontal),
 		widget.ContainerOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
-				Position: widget.RowLayoutPositionStart,
-				Stretch:  true,
-			}),
+			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
 			widget.WidgetOpts.MinSize(40, 10),
 		),
 	)
@@ -130,12 +120,13 @@ func rowLayout(d widget.Direction) widget.ContainerOpt {
 	)
 }
 
-func gridLayout(c int) widget.ContainerOpt {
+func gridLayout(hStretch []bool, vStretch []bool, space int, pad int) widget.ContainerOpt {
 	return widget.ContainerOpts.Layout(
 		widget.NewGridLayout(
-			widget.GridLayoutOpts.Columns(c),
-			widget.GridLayoutOpts.Padding(widget.NewInsetsSimple(4)),
-			widget.GridLayoutOpts.Spacing(6, 6),
+			widget.GridLayoutOpts.Columns(len(hStretch)),
+			widget.GridLayoutOpts.Stretch(hStretch, vStretch),
+			widget.GridLayoutOpts.Padding(widget.NewInsetsSimple(pad)),
+			widget.GridLayoutOpts.Spacing(space, space),
 		),
 	)
 }
