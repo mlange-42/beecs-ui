@@ -3,6 +3,7 @@ package res
 import (
 	"io/fs"
 	"log"
+	"path"
 
 	"github.com/hajimehoshi/ebiten/v2/text"
 	"golang.org/x/image/font"
@@ -10,15 +11,15 @@ import (
 	"golang.org/x/image/font/sfnt"
 )
 
-const fontFile = "data/fonts/WorkSans-Regular.ttf"
+const fontFile = "WorkSans-Regular.ttf"
 
 // Fonts resource for access to UI fonts.
 type Fonts struct {
 	Default font.Face
 }
 
-func NewFonts(fSys fs.FS) Fonts {
-	content, err := fs.ReadFile(fSys, fontFile)
+func NewFonts(fSys fs.FS, dir string) Fonts {
+	content, err := fs.ReadFile(fSys, path.Join(dir, fontFile))
 	if err != nil {
 		log.Fatal("error loading font file: ", err)
 	}

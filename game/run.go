@@ -52,7 +52,10 @@ func initGame(g *Game) error {
 	ecs.AddResource(&g.Model.World, &g.Screen)
 	ecs.AddResource(&g.Model.World, &g.Mouse)
 
-	fonts := res.NewFonts(GameData)
+	sprites := res.NewSprites(GameData, "data/images")
+	ecs.AddResource(&g.Model.World, &sprites)
+
+	fonts := res.NewFonts(GameData, "data/fonts")
 	ecs.AddResource(&g.Model.World, &fonts)
 
 	g.Model.AddSystem(&sys.InitUI{})
