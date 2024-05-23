@@ -1,6 +1,7 @@
 package game
 
 import (
+	"embed"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -14,7 +15,11 @@ import (
 
 const TPS = 30
 
-func Run() {
+var GameData embed.FS
+
+func Run(data embed.FS) {
+	GameData = data
+
 	game := NewGame(nil)
 	game.Initialize()
 
@@ -46,6 +51,9 @@ func initGame(g *Game) error {
 
 	ecs.AddResource(&g.Model.World, &g.Screen)
 	ecs.AddResource(&g.Model.World, &g.Mouse)
+
+	fonts := res.NewFonts(GameData)
+	ecs.AddResource(&g.Model.World, &fonts)
 
 	g.Model.AddSystem(&sys.InitUI{})
 	g.Model.AddSystem(&sys.Tick{})

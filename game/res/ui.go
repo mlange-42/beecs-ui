@@ -9,7 +9,8 @@ import (
 
 // UI resource.Represents the complete game UI.
 type UI struct {
-	ui *ebitenui.UI
+	ui    *ebitenui.UI
+	fonts *Fonts
 }
 
 func (ui *UI) UI() *ebitenui.UI {
@@ -24,8 +25,10 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 	ui.UI().Draw(screen)
 }
 
-func NewUI(world *ecs.World) UI {
-	ui := UI{}
+func NewUI(world *ecs.World, fonts *Fonts) UI {
+	ui := UI{
+		fonts: fonts,
+	}
 
 	rootContainer := widget.NewContainer(
 		widget.ContainerOpts.Layout(widget.NewStackedLayout()),

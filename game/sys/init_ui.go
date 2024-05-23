@@ -12,7 +12,7 @@ type InitUI struct {
 
 // Initialize the system
 func (s *InitUI) Initialize(world *ecs.World) {
-	s.ui = res.NewUI(world)
+	s.ui = res.NewUI(world, ecs.GetResource[res.Fonts](world))
 
 	ecs.AddResource(world, &s.ui)
 }
