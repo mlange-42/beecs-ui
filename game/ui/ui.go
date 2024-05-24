@@ -17,6 +17,7 @@ type UI struct {
 	speed   *res.GameSpeed
 
 	InfoLabel   *widget.Text
+	SpeedLabel  *widget.Text
 	PauseButton *widget.Button
 
 	resetFn func()

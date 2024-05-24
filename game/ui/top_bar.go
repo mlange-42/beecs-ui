@@ -27,13 +27,7 @@ func (ui *UI) createTopBarLabels() *widget.Container {
 			widget.WidgetOpts.MinSize(200, 10),
 		),
 	)
-	ui.InfoLabel = widget.NewText(
-		widget.TextOpts.Text("", ui.fonts.Default, ui.sprites.TextColor),
-		widget.TextOpts.Position(widget.TextPositionStart, widget.TextPositionCenter),
-		widget.TextOpts.WidgetOpts(widget.WidgetOpts.LayoutData(widget.RowLayoutData{
-			Position: widget.RowLayoutPositionCenter,
-		})),
-	)
+	ui.InfoLabel = ui.label("")
 
 	labels.AddChild(ui.InfoLabel)
 	return labels
@@ -48,6 +42,11 @@ func (ui *UI) createTopBarButtons() *widget.Container {
 			widget.WidgetOpts.MinSize(40, 10),
 		),
 	)
+
+	speedSlider := ui.slider(int(ui.speed.MinSpeed), int(ui.speed.MaxSpeed), 0, func(args *widget.SliderChangedEventArgs) {
+		ui.speed.Speed = int8(args.Slider.Current)
+	})
+	ui.SpeedLabel = ui.label(" 30 TPS")
 
 	resetButton := ui.button("<<", func(args *widget.ButtonClickedEventArgs) {
 		ui.resetFn()
@@ -73,6 +72,8 @@ func (ui *UI) createTopBarButtons() *widget.Container {
 		ui.speed.NextPause = ui.time.Tick + 365
 	})
 
+	buttons.AddChild(speedSlider)
+	buttons.AddChild(ui.SpeedLabel)
 	buttons.AddChild(resetButton)
 	buttons.AddChild(ui.PauseButton)
 	buttons.AddChild(stepButton)
