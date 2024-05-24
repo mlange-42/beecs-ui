@@ -21,7 +21,7 @@ func (ui *UI) createTopBar() *widget.Container {
 func (ui *UI) createTopBarLabels() *widget.Container {
 	labels := widget.NewContainer(
 		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
-		rowLayout(widget.DirectionHorizontal, 4),
+		rowLayout(widget.DirectionHorizontal, 4, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
 			widget.WidgetOpts.MinSize(200, 10),
@@ -36,7 +36,7 @@ func (ui *UI) createTopBarLabels() *widget.Container {
 func (ui *UI) createTopBarButtons() *widget.Container {
 	buttons := widget.NewContainer(
 		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
-		rowLayout(widget.DirectionHorizontal, 4),
+		rowLayout(widget.DirectionHorizontal, 4, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
 			widget.WidgetOpts.MinSize(40, 10),

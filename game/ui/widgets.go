@@ -1,12 +1,14 @@
 package ui
 
 import (
+	"image/color"
 	"log"
 	"math"
 	"strconv"
 	"strings"
 
 	"github.com/ebitenui/ebitenui/widget"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/mlange-42/beecs/model"
 )
 
@@ -18,11 +20,11 @@ func (ui *UI) defaultButtonImage() *widget.ButtonImage {
 	}
 }
 
-func rowLayout(d widget.Direction, space int) widget.ContainerOpt {
+func rowLayout(d widget.Direction, space int, pad int) widget.ContainerOpt {
 	return widget.ContainerOpts.Layout(
 		widget.NewRowLayout(
 			widget.RowLayoutOpts.Direction(d),
-			widget.RowLayoutOpts.Padding(widget.NewInsetsSimple(space)),
+			widget.RowLayoutOpts.Padding(widget.NewInsetsSimple(pad)),
 			widget.RowLayoutOpts.Spacing(space),
 		),
 	)
@@ -99,7 +101,7 @@ func (ui *UI) slider(min, max, value int, width int, stretchRow bool, handler fu
 func (ui *UI) parameterSliderF(min, max float64, precision float64, parameter string) *widget.Container {
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
-		rowLayout(widget.DirectionVertical, 4),
+		rowLayout(widget.DirectionVertical, 4, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
 				Stretch: true,
@@ -117,7 +119,7 @@ func (ui *UI) parameterSliderF(min, max float64, precision float64, parameter st
 		),
 	)
 	sliders := widget.NewContainer(
-		rowLayout(widget.DirectionVertical, 0),
+		rowLayout(widget.DirectionVertical, 0, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
 				Stretch: true,
@@ -168,7 +170,7 @@ func (ui *UI) parameterSliderF(min, max float64, precision float64, parameter st
 func (ui *UI) parameterSliderI(min, max int, parameter string) *widget.Container {
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
-		rowLayout(widget.DirectionVertical, 4),
+		rowLayout(widget.DirectionVertical, 4, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
 				Stretch: true,
@@ -186,7 +188,7 @@ func (ui *UI) parameterSliderI(min, max int, parameter string) *widget.Container
 		),
 	)
 	sliders := widget.NewContainer(
-		rowLayout(widget.DirectionVertical, 0),
+		rowLayout(widget.DirectionVertical, 0, 0),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
 				Stretch: true,
@@ -226,6 +228,72 @@ func (ui *UI) parameterSliderI(min, max int, parameter string) *widget.Container
 	ui.properties = append(ui.properties, &SliderPropertyInt{
 		name:   parameter,
 		slider: slider,
+	})
+
+	return root
+}
+
+func (ui *UI) parameterToggle(parameter string) *widget.Container {
+	root := widget.NewContainer(
+		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		gridLayout([]bool{true, false}, []bool{true}, 4, 4),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Stretch: true,
+			}),
+			widget.WidgetOpts.MinSize(200, 10),
+		),
+	)
+
+	label := ui.label(strings.Replace(parameter, "params.", "", 1), widget.TextPositionStart)
+
+	v, err := model.GetParameter(ui.world, parameter)
+	if err != nil {
+		log.Fatal(err)
+	}
+	value, ok := v.(bool)
+	if !ok {
+		log.Fatal("error converting parameter value to bool")
+	}
+
+	uncheckedImage := ebiten.NewImage(12, 12)
+	uncheckedImage.Fill(color.Transparent)
+
+	checkedImage := ebiten.NewImage(12, 12)
+	checkedImage.Fill(ui.sprites.TextColor)
+
+	toggle := widget.NewCheckbox(
+		widget.CheckboxOpts.ButtonOpts(
+			widget.ButtonOpts.WidgetOpts(
+				widget.WidgetOpts.LayoutData(widget.RowLayoutData{}),
+				widget.WidgetOpts.MinSize(20, 20),
+			),
+			widget.ButtonOpts.Image(ui.defaultButtonImage()),
+		),
+		widget.CheckboxOpts.Image(&widget.CheckboxGraphicImage{
+			Unchecked: &widget.ButtonImageImage{
+				Idle: uncheckedImage,
+			},
+			Checked: &widget.ButtonImageImage{
+				Idle: checkedImage,
+			},
+		}),
+		widget.CheckboxOpts.StateChangedHandler(func(args *widget.CheckboxChangedEventArgs) {
+			value := args.State == widget.WidgetChecked
+			model.SetParameter(ui.world, parameter, value)
+		}),
+	)
+
+	if value {
+		toggle.SetState(widget.WidgetChecked)
+	}
+
+	root.AddChild(label)
+	root.AddChild(toggle)
+
+	ui.properties = append(ui.properties, &ToggleProperty{
+		name:   parameter,
+		toggle: toggle,
 	})
 
 	return root
