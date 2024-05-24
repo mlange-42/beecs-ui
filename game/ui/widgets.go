@@ -373,29 +373,25 @@ func (ui *UI) scrollPanel(width int) (*widget.Container, *widget.Container) {
 	return root, content
 }
 
-func (ui *UI) imagePanel() *widget.Container {
+func (ui *UI) imagePanel(height int) *widget.Container {
 	img := ebiten.NewImage(1, 1)
 	img.Fill(color.RGBA{180, 180, 180, 255})
 
-	//slice := image.NewNineSlice(img, [3]int{0, img.Bounds().Dx(), 0}, [3]int{0, img.Bounds().Dy(), 0})
-
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
-		//rowLayout(widget.DirectionVertical, 4, 4),
-		widget.ContainerOpts.Layout(widget.NewStackedLayout(
-			widget.StackedLayoutOpts.Padding(widget.NewInsetsSimple(4)),
-		)),
+		rowLayout(widget.DirectionVertical, 4, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
-			widget.WidgetOpts.MinSize(10, 250),
+			widget.WidgetOpts.MinSize(10, height),
 		),
 	)
 
 	graphic := widget.NewGraphic(
 		widget.GraphicOpts.WidgetOpts(
-			//widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
-			widget.WidgetOpts.LayoutData(widget.StackedLayoutData{}),
-			widget.WidgetOpts.MinSize(10, 200),
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Stretch: true,
+			}),
+			widget.WidgetOpts.MinSize(10, 10),
 		),
 		widget.GraphicOpts.Image(img),
 	)
