@@ -2,7 +2,6 @@ package sys
 
 import (
 	"fmt"
-	"math"
 	"time"
 
 	"github.com/mlange-42/arche/ecs"
@@ -37,8 +36,8 @@ func (s *UpdateUI) Update(world *ecs.World) {
 		s.ui.PauseButton.Text().Label = "||"
 	}
 
-	tps := int(30 * math.Pow(2, float64(s.speed.Speed)))
-	s.ui.SpeedLabel.Label = fmt.Sprintf("%3d TPS", tps)
+	tps := s.speed.Speeds[s.speed.SpeedIndex]
+	s.ui.SpeedLabel.Label = fmt.Sprintf("%4d TPS", tps)
 
 	s.ui.Update()
 }

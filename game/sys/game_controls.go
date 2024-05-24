@@ -1,7 +1,6 @@
 package sys
 
 import (
-	"math"
 	"slices"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -21,8 +20,7 @@ type GameControls struct {
 
 	time      generic.Resource[res.GameTick]
 	speed     generic.Resource[res.GameSpeed]
-	update    generic.Resource[res.UpdateInterval]
-	prevSpeed int8
+	prevSpeed uint8
 
 	inputChars []rune
 }
@@ -31,19 +29,16 @@ type GameControls struct {
 func (s *GameControls) Initialize(world *ecs.World) {
 	s.time = generic.NewResource[res.GameTick](world)
 	s.speed = generic.NewResource[res.GameSpeed](world)
-	s.update = generic.NewResource[res.UpdateInterval](world)
 
 	speed := s.speed.Get()
-	update := s.update.Get()
 
-	ebiten.SetTPS(int(math.Pow(2, float64(speed.Speed)) * float64(update.Interval)))
+	ebiten.SetTPS(int(speed.Speeds[speed.SpeedIndex]))
 }
 
 // Update the system
 func (s *GameControls) Update(world *ecs.World) {
 	time := s.time.Get()
 	speed := s.speed.Get()
-	update := s.update.Get()
 
 	if inpututil.IsKeyJustPressed(s.FullscreenKey) {
 		ebiten.SetFullscreen(!ebiten.IsFullscreen())
@@ -71,18 +66,18 @@ func (s *GameControls) Update(world *ecs.World) {
 
 	s.inputChars = ebiten.AppendInputChars(s.inputChars)
 
-	if speed.Speed > speed.MinSpeed && slices.Contains(s.inputChars, s.SlowerKey) {
-		speed.Speed -= 1
+	if speed.SpeedIndex > 0 && slices.Contains(s.inputChars, s.SlowerKey) {
+		speed.SpeedIndex--
 	}
-	if speed.Speed < speed.MaxSpeed && slices.Contains(s.inputChars, s.FasterKey) {
-		speed.Speed += 1
+	if int(speed.SpeedIndex) < len(speed.Speeds)-1 && slices.Contains(s.inputChars, s.FasterKey) {
+		speed.SpeedIndex++
 	}
 
 	s.inputChars = s.inputChars[:0]
 
-	if s.prevSpeed != speed.Speed {
-		ebiten.SetTPS(int(math.Pow(2, float64(speed.Speed)) * float64(update.Interval)))
-		s.prevSpeed = speed.Speed
+	if s.prevSpeed != speed.SpeedIndex {
+		ebiten.SetTPS(int(speed.Speeds[speed.SpeedIndex]))
+		s.prevSpeed = speed.SpeedIndex
 	}
 }
 

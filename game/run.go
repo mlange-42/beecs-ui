@@ -38,6 +38,7 @@ func run(g *Game) {
 
 func initGame(g *Game) error {
 	ebiten.SetVsyncEnabled(true)
+	ebiten.SetTPS(TPS)
 
 	g.Model = arche.New()
 
@@ -45,15 +46,11 @@ func initGame(g *Game) error {
 	model.Default(&p, g.Model)
 
 	ecs.AddResource(&g.Model.World, &res.GameSpeed{
-		MinSpeed: -2,
-		MaxSpeed: 4,
+		Speeds:     []uint16{5, 7, 10, 15, 30, 60, 120, 240, 480, 1000, 9999},
+		SpeedIndex: 4,
 	})
 
 	ecs.AddResource(&g.Model.World, &res.GameTick{})
-
-	ecs.AddResource(&g.Model.World, &res.UpdateInterval{
-		Interval: TPS,
-	})
 
 	ecs.AddResource(&g.Model.World, &g.Screen)
 	ecs.AddResource(&g.Model.World, &g.Mouse)

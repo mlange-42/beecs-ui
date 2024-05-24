@@ -43,10 +43,10 @@ func (ui *UI) createTopBarButtons() *widget.Container {
 		),
 	)
 
-	speedSlider := ui.slider(int(ui.speed.MinSpeed), int(ui.speed.MaxSpeed), 0, func(args *widget.SliderChangedEventArgs) {
-		ui.speed.Speed = int8(args.Slider.Current)
+	speedSlider := ui.slider(0, len(ui.speed.Speeds)-1, int(ui.speed.SpeedIndex), func(args *widget.SliderChangedEventArgs) {
+		ui.speed.SpeedIndex = uint8(args.Slider.Current)
 	})
-	ui.SpeedLabel = ui.label(" 30 TPS")
+	ui.SpeedLabel = ui.label("  30 TPS")
 
 	resetButton := ui.button("<<", func(args *widget.ButtonClickedEventArgs) {
 		ui.resetFn()
