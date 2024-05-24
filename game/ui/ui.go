@@ -50,15 +50,21 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 	sx, sy := ui.imageGrid.GetWidget().Rect.Dx(), ui.imageGrid.GetWidget().Rect.Dy()
 	resize := ui.layoutUpdated || ui.gridSize.X != sx || ui.gridSize.Y != sy
 
-	for i := range ui.images {
-		ui.images[i].Draw(ui.world, resize)
-	}
-
 	if resize {
+		for i := range ui.images {
+			ui.images[i].Resize()
+		}
 		ui.gridSize.X = sx
 		ui.gridSize.Y = sy
 
 		ui.layoutUpdated = !ui.layoutUpdated
+	}
+
+	// TODO render on step
+	if resize || !ui.speed.Pause {
+		for i := range ui.images {
+			ui.images[i].Draw(ui.world)
+		}
 	}
 
 	ui.UI().Draw(screen)
