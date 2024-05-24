@@ -27,7 +27,7 @@ func (ui *UI) createTopBarLabels() *widget.Container {
 			widget.WidgetOpts.MinSize(200, 10),
 		),
 	)
-	ui.InfoLabel = ui.label("")
+	ui.InfoLabel = ui.label("", widget.TextPositionStart)
 
 	labels.AddChild(ui.InfoLabel)
 	return labels
@@ -47,10 +47,15 @@ func (ui *UI) createTopBarButtons() *widget.Container {
 		ui.speed.SpeedIndex = uint8(args.Slider.Current)
 	})
 
-	ui.SpeedLabel = ui.label("  30 TPS")
+	ui.SpeedLabel = ui.label("  30 TPS", widget.TextPositionEnd)
 
 	resetButton := ui.button("<<", func(args *widget.ButtonClickedEventArgs) {
-		ui.resetFn()
+		params := map[string]any{}
+		for _, p := range ui.properties {
+			params[p.Name()] = p.Value()
+		}
+
+		ui.resetFn(params)
 	})
 
 	ui.PauseButton = ui.button(">>", func(args *widget.ButtonClickedEventArgs) {

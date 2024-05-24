@@ -3,6 +3,8 @@ package ui
 import (
 	"log"
 	"math"
+	"strconv"
+	"strings"
 
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/mlange-42/beecs/model"
@@ -48,10 +50,10 @@ func (ui *UI) button(text string, handler func(args *widget.ButtonClickedEventAr
 	)
 }
 
-func (ui *UI) label(text string) *widget.Text {
+func (ui *UI) label(text string, hPos widget.TextPosition) *widget.Text {
 	return widget.NewText(
 		widget.TextOpts.Text(text, ui.fonts.Default, ui.sprites.TextColor),
-		widget.TextOpts.Position(widget.TextPositionStart, widget.TextPositionCenter),
+		widget.TextOpts.Position(hPos, widget.TextPositionCenter),
 		widget.TextOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
 				Position: widget.RowLayoutPositionCenter,
@@ -94,10 +96,10 @@ func (ui *UI) slider(min, max, value int, width int, stretchRow bool, handler fu
 	return slider
 }
 
-func (ui *UI) parameterSliderF(min, max float64, precision float64, width int, parameter string) *widget.Container {
+func (ui *UI) parameterSliderF(min, max float64, precision float64, parameter string) *widget.Container {
 	root := widget.NewContainer(
-		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
-		rowLayout(widget.DirectionHorizontal, 4),
+		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		rowLayout(widget.DirectionVertical, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
 				Stretch: true,
@@ -105,8 +107,27 @@ func (ui *UI) parameterSliderF(min, max float64, precision float64, width int, p
 			widget.WidgetOpts.MinSize(200, 10),
 		),
 	)
+	labels := widget.NewContainer(
+		gridLayout([]bool{true, false}, []bool{true}, 4, 0),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Stretch: true,
+			}),
+			widget.WidgetOpts.MinSize(200, 10),
+		),
+	)
+	sliders := widget.NewContainer(
+		rowLayout(widget.DirectionVertical, 0),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Stretch: true,
+			}),
+			widget.WidgetOpts.MinSize(200, 12),
+		),
+	)
 
-	label := ui.label(parameter)
+	label := ui.label(strings.Replace(parameter, "params.", "", 1), widget.TextPositionStart)
+	valueLabel := ui.label("100", widget.TextPositionEnd)
 
 	v, err := model.GetParameter(ui.world, parameter)
 	if err != nil {
@@ -116,23 +137,37 @@ func (ui *UI) parameterSliderF(min, max float64, precision float64, width int, p
 	if !ok {
 		log.Fatal("error converting parameter value to float")
 	}
+	valueLabel.Label = strconv.FormatFloat(vv, 'f', -1, 64)
 	value := int(vv * precision)
-	slider := ui.slider(int(min*precision), int(max*precision), value, width, true, func(args *widget.SliderChangedEventArgs) {
-		err := model.SetParameter(ui.world, parameter, float64(args.Current)/precision)
+	slider := ui.slider(int(min*precision), int(max*precision), value, 0, true, func(args *widget.SliderChangedEventArgs) {
+		v := float64(args.Current) / precision
+		err := model.SetParameter(ui.world, parameter, v)
+		valueLabel.Label = strconv.FormatFloat(v, 'f', -1, 64)
 		if err != nil {
 			log.Fatal(err)
 		}
 	})
 
-	root.AddChild(label)
-	root.AddChild(slider)
+	labels.AddChild(label)
+	labels.AddChild(valueLabel)
+
+	sliders.AddChild(slider)
+
+	root.AddChild(labels)
+	root.AddChild(sliders)
+
+	ui.properties = append(ui.properties, &SliderPropertyFloat{
+		name:      parameter,
+		slider:    slider,
+		precision: precision,
+	})
 
 	return root
 }
 
-func (ui *UI) parameterSliderI(min, max int, width int, parameter string) *widget.Container {
+func (ui *UI) parameterSliderI(min, max int, parameter string) *widget.Container {
 	root := widget.NewContainer(
-		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		rowLayout(widget.DirectionVertical, 4),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
@@ -141,26 +176,57 @@ func (ui *UI) parameterSliderI(min, max int, width int, parameter string) *widge
 			widget.WidgetOpts.MinSize(200, 10),
 		),
 	)
+	labels := widget.NewContainer(
+		gridLayout([]bool{true, false}, []bool{true}, 4, 0),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Stretch: true,
+			}),
+			widget.WidgetOpts.MinSize(200, 10),
+		),
+	)
+	sliders := widget.NewContainer(
+		rowLayout(widget.DirectionVertical, 0),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Stretch: true,
+			}),
+			widget.WidgetOpts.MinSize(200, 12),
+		),
+	)
 
-	label := ui.label(parameter)
+	label := ui.label(strings.Replace(parameter, "params.", "", 1), widget.TextPositionStart)
+	valueLabel := ui.label("100", widget.TextPositionEnd)
 
 	v, err := model.GetParameter(ui.world, parameter)
 	if err != nil {
 		log.Fatal(err)
 	}
-	vv, ok := v.(int64)
+	value, ok := v.(int64)
 	if !ok {
 		log.Fatal("error converting parameter value to int")
 	}
-	slider := ui.slider(min, max, int(vv), width, true, func(args *widget.SliderChangedEventArgs) {
+	valueLabel.Label = strconv.Itoa(int(value))
+	slider := ui.slider(min, max, int(value), 0, true, func(args *widget.SliderChangedEventArgs) {
 		err := model.SetParameter(ui.world, parameter, args.Current)
+		valueLabel.Label = strconv.Itoa(args.Current)
 		if err != nil {
 			log.Fatal(err)
 		}
 	})
 
-	root.AddChild(label)
-	root.AddChild(slider)
+	labels.AddChild(label)
+	labels.AddChild(valueLabel)
+
+	sliders.AddChild(slider)
+
+	root.AddChild(labels)
+	root.AddChild(sliders)
+
+	ui.properties = append(ui.properties, &SliderPropertyInt{
+		name:   parameter,
+		slider: slider,
+	})
 
 	return root
 }

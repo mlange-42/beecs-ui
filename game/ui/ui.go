@@ -21,7 +21,9 @@ type UI struct {
 	SpeedLabel  *widget.Text
 	PauseButton *widget.Button
 
-	resetFn func()
+	properties []ParameterProperty
+
+	resetFn func(parameters map[string]any)
 }
 
 func (ui *UI) UI() *ebitenui.UI {
@@ -36,13 +38,13 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 	ui.UI().Draw(screen)
 }
 
-func New(world *ecs.World, time *res.GameTick, fonts *res.Fonts, sprites *res.Sprites, speed *res.GameSpeed, resetFn func()) UI {
+func New(world *ecs.World, resetFn func(parameters map[string]any)) UI {
 	ui := UI{
 		world:   world,
-		time:    time,
-		fonts:   fonts,
-		sprites: sprites,
-		speed:   speed,
+		time:    ecs.GetResource[res.GameTick](world),
+		fonts:   ecs.GetResource[res.Fonts](world),
+		sprites: ecs.GetResource[res.Sprites](world),
+		speed:   ecs.GetResource[res.GameSpeed](world),
 		resetFn: resetFn,
 	}
 

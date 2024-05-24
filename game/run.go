@@ -23,20 +23,20 @@ func Run(data embed.FS) {
 	game := NewGame(nil)
 	game.Initialize()
 
-	initGame(&game)
+	initGame(&game, map[string]any{})
 
 	if err := game.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func run(g *Game) {
-	if err := initGame(g); err != nil {
+func run(g *Game, parameters map[string]any) {
+	if err := initGame(g, parameters); err != nil {
 		panic(err)
 	}
 }
 
-func initGame(g *Game) error {
+func initGame(g *Game, parameters map[string]any) error {
 	ebiten.SetVsyncEnabled(true)
 	ebiten.SetTPS(TPS)
 
@@ -63,9 +63,16 @@ func initGame(g *Game) error {
 	fonts := res.NewFonts(GameData, "data/fonts")
 	ecs.AddResource(&g.Model.World, &fonts)
 
+	for name, value := range parameters {
+		err := model.SetParameter(&g.Model.World, name, value)
+		if err != nil {
+			return err
+		}
+	}
+
 	g.Model.AddSystem(&sys.InitUI{
-		ResetFn: func() {
-			run(g)
+		ResetFn: func(parameters map[string]any) {
+			run(g, parameters)
 		},
 	})
 	g.Model.AddSystem(&sys.UpdateUI{})
