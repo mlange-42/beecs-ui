@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/mlange-42/beecs/model"
@@ -375,40 +374,38 @@ func (ui *UI) scrollPanel(width int) (*widget.Container, *widget.Container) {
 }
 
 func (ui *UI) imagePanel() *widget.Container {
-	img := ebiten.NewImage(400, 300)
+	img := ebiten.NewImage(1, 1)
 	img.Fill(color.RGBA{180, 180, 180, 255})
 
-	slice := image.NewNineSlice(img, [3]int{0, img.Bounds().Dx(), 0}, [3]int{0, img.Bounds().Dy(), 0})
+	//slice := image.NewNineSlice(img, [3]int{0, img.Bounds().Dx(), 0}, [3]int{0, img.Bounds().Dy(), 0})
 
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
-		rowLayout(widget.DirectionVertical, 4, 4),
+		//rowLayout(widget.DirectionVertical, 4, 4),
+		widget.ContainerOpts.Layout(widget.NewStackedLayout(
+			widget.StackedLayoutOpts.Padding(widget.NewInsetsSimple(4)),
+		)),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
-			widget.WidgetOpts.MinSize(10, 200),
+			widget.WidgetOpts.MinSize(10, 250),
 		),
 	)
 
-	panel := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(slice),
-		rowLayout(widget.DirectionVertical, 0, 0),
-		widget.ContainerOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
-				Stretch: true,
-			}),
-			widget.WidgetOpts.MinSize(10, 200),
-		),
-	)
-
-	root.AddChild(panel)
-
-	/*root.AddChild(widget.NewGraphic(
+	graphic := widget.NewGraphic(
 		widget.GraphicOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
+			//widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
+			widget.WidgetOpts.LayoutData(widget.StackedLayoutData{}),
+			widget.WidgetOpts.MinSize(10, 200),
 		),
-		//widget.GraphicOpts.Image(img),
-		widget.GraphicOpts.ImageNineSlice(slice),
-	))*/
+		widget.GraphicOpts.Image(img),
+	)
+
+	root.AddChild(graphic)
+
+	ui.images = append(ui.images, ImagePanel{
+		Container: root,
+		Graphic:   graphic,
+	})
 
 	return root
 }
