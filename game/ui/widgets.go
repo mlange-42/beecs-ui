@@ -56,7 +56,7 @@ func (ui *UI) label(text string) *widget.Text {
 	)
 }
 
-func (ui *UI) slider(min, max, value int, handler func(args *widget.SliderChangedEventArgs)) *widget.Slider {
+func (ui *UI) slider(min, max, value int, width int, handler func(args *widget.SliderChangedEventArgs)) *widget.Slider {
 	slider := widget.NewSlider(
 		widget.SliderOpts.Direction(widget.DirectionHorizontal),
 		widget.SliderOpts.MinMax(min, max),
@@ -65,7 +65,7 @@ func (ui *UI) slider(min, max, value int, handler func(args *widget.SliderChange
 				Position: widget.RowLayoutPositionCenter,
 				Stretch:  false,
 			}),
-			widget.WidgetOpts.MinSize(140, 6),
+			widget.WidgetOpts.MinSize(width, 6),
 		),
 		widget.SliderOpts.Images(
 			&widget.SliderTrackImage{
