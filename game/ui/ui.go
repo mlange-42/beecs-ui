@@ -98,8 +98,3 @@ func (ui *UI) createMainPanel() *widget.Container {
 
 	return root
 }
-
-func (ui *UI) createRightPanel() *widget.Container {
-	scroll, _ := ui.scrollPanel(0)
-	return scroll
-}

@@ -372,3 +372,25 @@ func (ui *UI) scrollPanel(width int) (*widget.Container, *widget.Container) {
 
 	return root, content
 }
+
+func (ui *UI) imagePanel() *widget.Container {
+	root := widget.NewContainer(
+		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		rowLayout(widget.DirectionVertical, 4, 4),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
+		),
+	)
+
+	img := ebiten.NewImage(400, 300)
+	img.Fill(color.RGBA{180, 180, 180, 255})
+
+	root.AddChild(widget.NewGraphic(
+		widget.GraphicOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
+		),
+		widget.GraphicOpts.Image(img),
+	))
+
+	return root
+}
