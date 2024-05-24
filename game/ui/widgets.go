@@ -9,7 +9,10 @@ import (
 
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/mlange-42/beecs-ui/game/plot"
 	"github.com/mlange-42/beecs/model"
+	"gonum.org/v1/plot/vg"
+	"gonum.org/v1/plot/vg/vgimg"
 )
 
 func (ui *UI) defaultButtonImage() *widget.ButtonImage {
@@ -373,7 +376,7 @@ func (ui *UI) scrollPanel(width int) (*widget.Container, *widget.Container) {
 	return root, content
 }
 
-func (ui *UI) imagePanel(height int) *widget.Container {
+func (ui *UI) imagePanel(drawer plot.Drawer, height int) *widget.Container {
 	img := ebiten.NewImage(1, 1)
 	img.Fill(color.RGBA{180, 180, 180, 255})
 
@@ -401,6 +404,10 @@ func (ui *UI) imagePanel(height int) *widget.Container {
 	ui.images = append(ui.images, ImagePanel{
 		Container: root,
 		Graphic:   graphic,
+		Drawer:    drawer,
+		canvas: vgimg.New(
+			vg.Points(float64(img.Bounds().Dx())),
+			vg.Points(float64(img.Bounds().Dy()))),
 	})
 
 	return root
