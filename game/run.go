@@ -40,6 +40,7 @@ func initGame(g *Game, parameters map[string]any) error {
 	ebiten.SetVsyncEnabled(true)
 	ebiten.SetTPS(TPS)
 
+	g.Reset()
 	g.Model = arche.New()
 
 	p := params.Default()
@@ -50,6 +51,7 @@ func initGame(g *Game, parameters map[string]any) error {
 	ecs.AddResource(&g.Model.World, &res.GameSpeed{
 		Speeds:     []uint16{5, 7, 10, 15, 30, 60, 120, 240, 480, 1000, 9999},
 		SpeedIndex: 4,
+		Pause:      true,
 	})
 
 	ecs.AddResource(&g.Model.World, &res.GameTick{})
@@ -75,19 +77,23 @@ func initGame(g *Game, parameters map[string]any) error {
 			run(g, parameters)
 		},
 	})
-	g.Model.AddSystem(&sys.UpdateUI{})
 
-	g.Model.AddSystem(&sys.GameControls{
+	g.Systems = append(g.Systems, &sys.UpdateUI{})
+
+	g.Systems = append(g.Systems, &sys.Tick{})
+
+	g.Systems = append(g.Systems, &sys.GameControls{
 		PauseKey:      ebiten.KeySpace,
 		StepKey:       ebiten.KeyArrowRight,
 		SlowerKey:     '[',
 		FasterKey:     ']',
 		FullscreenKey: ebiten.KeyF11,
 	})
+
 	g.Model.AddUISystem(&sys.RenderUI{})
-	g.Model.AddSystem(&sys.Tick{})
 
 	g.Model.Initialize()
+	g.InitializeRun()
 
 	return nil
 }

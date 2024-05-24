@@ -4,11 +4,12 @@ import (
 	"github.com/ebitenui/ebitenui/widget"
 )
 
-func (ui *UI) createRightPanel() *widget.Container {
+func (ui *UI) createRightPanel(layout *Layout) *widget.Container {
 	scroll, content := ui.scrollPanel(0)
 
 	root := widget.NewContainer(
-		gridLayout([]bool{true}, []bool{true}, 4, 0),
+		//gridLayout([]bool{true}, []bool{false}, 4, 0),
+		rowLayout(widget.DirectionVertical, 4, 0),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
 				Stretch: true,
@@ -17,26 +18,6 @@ func (ui *UI) createRightPanel() *widget.Container {
 		),
 	)
 
-	layout := Layout{
-		Rows: []LayoutRow{
-			{
-				Height: 350,
-				Panels: []LayoutPanel{
-					{}, {},
-				},
-			}, {
-				Height: 200,
-				Panels: []LayoutPanel{
-					{}, {}, {},
-				},
-			}, {
-				Height: 200,
-				Panels: []LayoutPanel{
-					{},
-				},
-			},
-		},
-	}
 	for _, row := range layout.Rows {
 		root.AddChild(ui.createLayoutRow(&row))
 	}
@@ -66,8 +47,7 @@ func (ui *UI) createLayoutRow(row *LayoutRow) *widget.Container {
 	)
 
 	for _, p := range row.Panels {
-		_ = p
-		root.AddChild(ui.imagePanel(row.Height))
+		root.AddChild(ui.imagePanel(&p, row.Height))
 	}
 
 	return root

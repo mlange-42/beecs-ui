@@ -37,15 +37,24 @@ func (ui *UI) UI() *ebitenui.UI {
 }
 
 func (ui *UI) Update() {
+	if !ui.speed.Pause {
+		for i := range ui.images {
+			ui.images[i].Update(ui.world)
+		}
+	}
+
 	ui.UI().Update()
 }
 
 func (ui *UI) Draw(screen *ebiten.Image) {
 	sx, sy := ui.imageGrid.GetWidget().Rect.Dx(), ui.imageGrid.GetWidget().Rect.Dy()
-	if ui.layoutUpdated || ui.gridSize.X != sx || ui.gridSize.Y != sy {
-		for i := range ui.images {
-			ui.images[i].Update()
-		}
+	resize := ui.layoutUpdated || ui.gridSize.X != sx || ui.gridSize.Y != sy
+
+	for i := range ui.images {
+		ui.images[i].Draw(ui.world, resize)
+	}
+
+	if resize {
 		ui.gridSize.X = sx
 		ui.gridSize.Y = sy
 
@@ -75,6 +84,10 @@ func New(world *ecs.World, resetFn func(parameters map[string]any)) UI {
 		Container: rootContainer,
 	}
 	ui.ui = &eui
+
+	for i := range ui.images {
+		ui.images[i].Initialize(world)
+	}
 
 	return ui
 }
@@ -110,8 +123,8 @@ func (ui *UI) createMainPanel() *widget.Container {
 		),
 	)
 
-	root.AddChild(ui.createLeftPanel())
-	root.AddChild(ui.createRightPanel())
+	root.AddChild(ui.createLeftPanel(&defaultLayout))
+	root.AddChild(ui.createRightPanel(&defaultLayout))
 
 	return root
 }

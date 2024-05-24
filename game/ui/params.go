@@ -47,10 +47,6 @@ func (p *ToggleProperty) Value() any {
 	return p.toggle.State() == widget.WidgetChecked
 }
 
-type Parameters struct {
-	Sections []ParameterSection
-}
-
 type ParameterSection struct {
 	Text       string
 	Parameters []Parameter
