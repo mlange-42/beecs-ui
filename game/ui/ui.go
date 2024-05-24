@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"image"
+
 	"github.com/ebitenui/ebitenui"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -21,7 +23,11 @@ type UI struct {
 	SpeedLabel  *widget.Text
 	PauseButton *widget.Button
 
-	properties []ParameterProperty
+	properties    []ParameterProperty
+	images        []ImagePanel
+	imageGrid     *widget.Container
+	gridSize      image.Point
+	layoutUpdated bool
 
 	resetFn func(parameters map[string]any)
 }
@@ -35,6 +41,17 @@ func (ui *UI) Update() {
 }
 
 func (ui *UI) Draw(screen *ebiten.Image) {
+	sx, sy := ui.imageGrid.GetWidget().Rect.Dx(), ui.imageGrid.GetWidget().Rect.Dy()
+	if ui.layoutUpdated || ui.gridSize.X != sx || ui.gridSize.Y != sy {
+		for i := range ui.images {
+			ui.images[i].Update()
+		}
+		ui.gridSize.X = sx
+		ui.gridSize.Y = sy
+
+		ui.layoutUpdated = !ui.layoutUpdated
+	}
+
 	ui.UI().Draw(screen)
 }
 
@@ -97,9 +114,4 @@ func (ui *UI) createMainPanel() *widget.Container {
 	root.AddChild(ui.createRightPanel())
 
 	return root
-}
-
-func (ui *UI) createRightPanel() *widget.Container {
-	scroll, _ := ui.scrollPanel(0)
-	return scroll
 }
