@@ -32,27 +32,27 @@ func (p *ImagePanel) Update(world *ecs.World) {
 	p.Drawer.Update(world)
 }
 
-func (p *ImagePanel) Draw(world *ecs.World, resize bool) {
-	if resize {
-		if len(p.Container.Children()) > 0 {
-			p.Container.RemoveChild(p.Graphic)
-			return
-		}
-		ssx, ssy := p.Container.GetWidget().Rect.Dx(), p.Container.GetWidget().Rect.Dy()
-		w, h := float64(ssx-2*imageMargin), float64(ssy-2*imageMargin)
-
-		p.canvas = vgimg.New(
-			vg.Points(w*scale),
-			vg.Points(h*scale))
-		tempImg := p.canvas.Image()
-
-		img := ebiten.NewImage(tempImg.Bounds().Dx(), tempImg.Bounds().Dy())
-		p.Graphic.Image = img
-
+func (p *ImagePanel) Resize() {
+	if len(p.Container.Children()) > 0 {
 		p.Container.RemoveChild(p.Graphic)
-		p.Container.AddChild(p.Graphic)
+		return
 	}
+	ssx, ssy := p.Container.GetWidget().Rect.Dx(), p.Container.GetWidget().Rect.Dy()
+	w, h := float64(ssx-2*imageMargin), float64(ssy-2*imageMargin)
 
+	p.canvas = vgimg.New(
+		vg.Points(w*scale),
+		vg.Points(h*scale))
+	tempImg := p.canvas.Image()
+
+	img := ebiten.NewImage(tempImg.Bounds().Dx(), tempImg.Bounds().Dy())
+	p.Graphic.Image = img
+
+	p.Container.RemoveChild(p.Graphic)
+	p.Container.AddChild(p.Graphic)
+}
+
+func (p *ImagePanel) Draw(world *ecs.World) {
 	p.Drawer.Draw(world, p.canvas)
 
 	img := p.canvas.Image()
