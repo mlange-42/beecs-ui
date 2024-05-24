@@ -47,8 +47,7 @@ func (ui *UI) createLayoutRow(row *LayoutRow) *widget.Container {
 	)
 
 	for _, p := range row.Panels {
-		_ = p
-		root.AddChild(ui.imagePanel(p.Drawer, row.Height))
+		root.AddChild(ui.imagePanel(&p, row.Height))
 	}
 
 	return root

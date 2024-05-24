@@ -18,7 +18,7 @@ import (
 // Replaces the complete data by the table provided by the observer on every update.
 // Particularly useful for live histograms.
 type Lines struct {
-	Observer observer.Table // Observer providing a data series for lines.
+	observer observer.Table // Observer providing a data series for lines.
 	X        string         // X column name. Optional. Defaults to row index.
 	Y        []string       // Y column names. Optional. Defaults to all but X column.
 	XLim     [2]float64     // X axis limits. Optional, default auto.
@@ -34,10 +34,16 @@ type Lines struct {
 }
 
 // Initialize the drawer.
-func (l *Lines) Initialize(w *ecs.World) {
-	l.Observer.Initialize(w)
+func (l *Lines) Initialize(w *ecs.World, obs any) error {
+	table, castOk := obs.(observer.Table)
+	if !castOk {
+		return fmt.Errorf("unable to cast %T to table observer", obs)
+	}
+	l.observer = table
 
-	l.headers = l.Observer.Header()
+	l.observer.Initialize(w)
+
+	l.headers = l.observer.Header()
 
 	l.scale = calcScaleCorrection()
 
@@ -69,11 +75,13 @@ func (l *Lines) Initialize(w *ecs.World) {
 	}
 
 	l.series = make([]plotter.XYs, len(l.yIndices))
+
+	return nil
 }
 
 // Update the drawer.
 func (l *Lines) Update(w *ecs.World) {
-	l.Observer.Update(w)
+	l.observer.Update(w)
 }
 
 // Draw the drawer.
@@ -113,7 +121,7 @@ func (l *Lines) Draw(w *ecs.World, canvas *vgimg.Canvas) {
 }
 
 func (l *Lines) updateData(w *ecs.World) {
-	data := l.Observer.Values(w)
+	data := l.observer.Values(w)
 	xi := l.xIndex
 	yis := l.yIndices
 

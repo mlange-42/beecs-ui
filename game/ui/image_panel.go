@@ -12,17 +12,20 @@ import (
 	"gonum.org/v1/plot/vg/vgimg"
 )
 
+const imageMargin = 12
+
 var scale = calcScaleCorrection()
 
 type ImagePanel struct {
 	Container *widget.Container
 	Graphic   *widget.Graphic
 	Drawer    plot.Drawer
+	Observer  any
 	canvas    *vgimg.Canvas
 }
 
 func (p *ImagePanel) Initialize(world *ecs.World) {
-	p.Drawer.Initialize(world)
+	p.Drawer.Initialize(world, p.Observer)
 }
 
 func (p *ImagePanel) Update(world *ecs.World) {
@@ -36,7 +39,7 @@ func (p *ImagePanel) Draw(world *ecs.World, resize bool) {
 			return
 		}
 		ssx, ssy := p.Container.GetWidget().Rect.Dx(), p.Container.GetWidget().Rect.Dy()
-		w, h := float64(ssx-8), float64(ssy-8)
+		w, h := float64(ssx-2*imageMargin), float64(ssy-2*imageMargin)
 
 		p.canvas = vgimg.New(
 			vg.Points(w*scale),
@@ -72,7 +75,8 @@ type LayoutRow struct {
 }
 
 type LayoutPanel struct {
-	Drawer plot.Drawer
+	Drawer   plot.Drawer
+	Observer any
 }
 
 // Calculate scale correction for scaled monitors.

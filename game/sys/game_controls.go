@@ -62,6 +62,8 @@ func (s *GameControls) Update(world *ecs.World) {
 
 	if speed.NextPause == time.Tick {
 		speed.Pause = true
+		speed.NextPause = -1
+
 	}
 
 	s.inputChars = ebiten.AppendInputChars(s.inputChars)

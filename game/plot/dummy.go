@@ -8,7 +8,9 @@ import (
 type Dummy struct{}
 
 // Initialize the drawer.
-func (t *Dummy) Initialize(w *ecs.World) {}
+func (t *Dummy) Initialize(w *ecs.World, observer any) error {
+	return nil
+}
 
 // Update the drawer.
 func (t *Dummy) Update(w *ecs.World) {}

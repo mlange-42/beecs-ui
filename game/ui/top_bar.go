@@ -1,6 +1,8 @@
 package ui
 
-import "github.com/ebitenui/ebitenui/widget"
+import (
+	"github.com/ebitenui/ebitenui/widget"
+)
 
 func (ui *UI) createTopBar() *widget.Container {
 	root := widget.NewContainer(

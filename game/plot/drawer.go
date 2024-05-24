@@ -6,7 +6,7 @@ import (
 )
 
 type Drawer interface {
-	Initialize(w *ecs.World)
+	Initialize(w *ecs.World, observer any) error
 	Update(w *ecs.World)
 	Draw(world *ecs.World, canvas *vgimg.Canvas)
 }

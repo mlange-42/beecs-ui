@@ -16,7 +16,7 @@ import (
 // Creates a line series per column of the observer.
 // Adds one row to the data per update.
 type TimeSeries struct {
-	Observer       observer.Row // Observer providing a data row per update.
+	observer       observer.Row // Observer providing a data row per update.
 	Columns        []string     // Columns to show, by name. Optional, default all.
 	UpdateInterval int          // Interval for getting data from the the observer, in model ticks. Optional.
 	Labels         Labels       // Labels for plot and axes. Optional.
@@ -40,10 +40,16 @@ func (t *TimeSeries) append(x float64, values []float64) {
 }
 
 // Initialize the drawer.
-func (t *TimeSeries) Initialize(w *ecs.World) {
-	t.Observer.Initialize(w)
+func (t *TimeSeries) Initialize(w *ecs.World, obs any) error {
+	row, ok := obs.(observer.Row)
+	if !ok {
+		return fmt.Errorf("unable to cast %T to row observer", obs)
+	}
+	t.observer = row
 
-	t.headers = t.Observer.Header()
+	t.observer.Initialize(w)
+
+	t.headers = t.observer.Header()
 
 	if len(t.Columns) == 0 {
 		t.indices = make([]int, len(t.headers))
@@ -65,13 +71,15 @@ func (t *TimeSeries) Initialize(w *ecs.World) {
 
 	t.scale = calcScaleCorrection()
 	t.step = 0
+
+	return nil
 }
 
 // Update the drawer.
 func (t *TimeSeries) Update(w *ecs.World) {
-	t.Observer.Update(w)
+	t.observer.Update(w)
 	if t.UpdateInterval <= 1 || t.step%int64(t.UpdateInterval) == 0 {
-		t.append(float64(t.step), t.Observer.Values(w))
+		t.append(float64(t.step), t.observer.Values(w))
 	}
 	t.step++
 }

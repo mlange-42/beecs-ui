@@ -46,18 +46,18 @@ func calcScaleCorrection() float64 {
 
 func setLabels(p *plot.Plot, l Labels) {
 	p.Title.Text = l.Title
-	p.Title.TextStyle.Font.Size = 16
+	p.Title.TextStyle.Font.Size = 13
 	p.Title.TextStyle.Font.Variant = "Mono"
 
 	p.X.Label.Text = l.X
-	p.X.Label.TextStyle.Font.Size = 14
+	p.X.Label.TextStyle.Font.Size = 12
 	p.X.Label.TextStyle.Font.Variant = "Mono"
 
 	p.X.Tick.Label.Font.Size = 12
 	p.X.Tick.Label.Font.Variant = "Mono"
 
 	p.Y.Label.Text = l.Y
-	p.Y.Label.TextStyle.Font.Size = 14
+	p.Y.Label.TextStyle.Font.Size = 12
 	p.Y.Label.TextStyle.Font.Variant = "Mono"
 
 	p.Y.Tick.Label.Font.Size = 12

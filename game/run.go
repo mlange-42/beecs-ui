@@ -51,6 +51,7 @@ func initGame(g *Game, parameters map[string]any) error {
 	ecs.AddResource(&g.Model.World, &res.GameSpeed{
 		Speeds:     []uint16{5, 7, 10, 15, 30, 60, 120, 240, 480, 1000, 9999},
 		SpeedIndex: 4,
+		Pause:      true,
 	})
 
 	ecs.AddResource(&g.Model.World, &res.GameTick{})
@@ -71,13 +72,15 @@ func initGame(g *Game, parameters map[string]any) error {
 		}
 	}
 
-	g.Systems = append(g.Systems, &sys.InitUI{
+	g.Model.AddSystem(&sys.InitUI{
 		ResetFn: func(parameters map[string]any) {
 			run(g, parameters)
 		},
 	})
 
 	g.Systems = append(g.Systems, &sys.UpdateUI{})
+
+	g.Systems = append(g.Systems, &sys.Tick{})
 
 	g.Systems = append(g.Systems, &sys.GameControls{
 		PauseKey:      ebiten.KeySpace,
@@ -88,8 +91,6 @@ func initGame(g *Game, parameters map[string]any) error {
 	})
 
 	g.Model.AddUISystem(&sys.RenderUI{})
-
-	g.Systems = append(g.Systems, &sys.Tick{})
 
 	g.Model.Initialize()
 	g.InitializeRun()
