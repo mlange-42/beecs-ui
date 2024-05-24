@@ -123,8 +123,8 @@ func (ui *UI) createMainPanel() *widget.Container {
 		),
 	)
 
-	root.AddChild(ui.createLeftPanel())
-	root.AddChild(ui.createRightPanel())
+	root.AddChild(ui.createLeftPanel(&defaultLayout))
+	root.AddChild(ui.createRightPanel(&defaultLayout))
 
 	return root
 }

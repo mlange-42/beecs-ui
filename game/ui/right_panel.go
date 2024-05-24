@@ -2,11 +2,9 @@ package ui
 
 import (
 	"github.com/ebitenui/ebitenui/widget"
-	"github.com/mlange-42/beecs-ui/game/plot"
-	"github.com/mlange-42/beecs/obs"
 )
 
-func (ui *UI) createRightPanel() *widget.Container {
+func (ui *UI) createRightPanel(layout *Layout) *widget.Container {
 	scroll, content := ui.scrollPanel(0)
 
 	root := widget.NewContainer(
@@ -20,41 +18,6 @@ func (ui *UI) createRightPanel() *widget.Container {
 		),
 	)
 
-	layout := Layout{
-		Rows: []LayoutRow{
-			{
-				Height: 350,
-				Panels: []LayoutPanel{
-					{
-						Drawer: &plot.TimeSeries{
-							Observer: &obs.WorkerCohorts{},
-							Labels: plot.Labels{
-								Title: "Worker cohorts",
-								X:     "Time [d]",
-								Y:     "Count",
-							},
-						},
-					},
-					{Drawer: &plot.Dummy{}},
-				},
-			}, {
-				Height: 200,
-				Panels: []LayoutPanel{
-					{Drawer: &plot.Dummy{}}, {Drawer: &plot.Dummy{}}, {Drawer: &plot.Dummy{}},
-				},
-			}, {
-				Height: 200,
-				Panels: []LayoutPanel{
-					{Drawer: &plot.Dummy{}}, {Drawer: &plot.Dummy{}}, {Drawer: &plot.Dummy{}},
-				},
-			}, {
-				Height: 400,
-				Panels: []LayoutPanel{
-					{Drawer: &plot.Dummy{}},
-				},
-			},
-		},
-	}
 	for _, row := range layout.Rows {
 		root.AddChild(ui.createLayoutRow(&row))
 	}

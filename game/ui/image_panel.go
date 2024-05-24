@@ -62,7 +62,8 @@ func (p *ImagePanel) Draw(world *ecs.World, resize bool) {
 }
 
 type Layout struct {
-	Rows []LayoutRow
+	Parameters []ParameterSection
+	Rows       []LayoutRow
 }
 
 type LayoutRow struct {

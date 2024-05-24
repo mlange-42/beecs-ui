@@ -2,57 +2,15 @@ package ui
 
 import "github.com/ebitenui/ebitenui/widget"
 
-func (ui *UI) createLeftPanel() *widget.Container {
+func (ui *UI) createLeftPanel(layout *Layout) *widget.Container {
 	scroll, content := ui.scrollPanel(260)
 
-	pars := Parameters{
-		Sections: []ParameterSection{
-			{
-				Text: "Initialization",
-				Parameters: []Parameter{
-					{
-						Parameter: "params.InitialPopulation.Count",
-						SliderInt: &SliderInt{
-							Min: 1_000,
-							Max: 50_000,
-						},
-					},
-				},
-			},
-			{
-				Text: "HandlingTime",
-				Parameters: []Parameter{
-					{
-						Parameter: "params.HandlingTime.ConstantHandlingTime",
-						Toggle:    &Toggle{},
-					},
-					{
-						Parameter: "params.HandlingTime.NectarGathering",
-						SliderFloat: &SliderFloat{
-							Min:       60,
-							Max:       3600,
-							Precision: 1,
-						},
-					},
-					{
-						Parameter: "params.HandlingTime.PollenGathering",
-						SliderFloat: &SliderFloat{
-							Min:       60,
-							Max:       3600,
-							Precision: 1,
-						},
-					},
-				},
-			},
-		},
-	}
-
-	content.AddChild(ui.crateParameters(pars))
+	content.AddChild(ui.crateParameters(layout.Parameters))
 
 	return scroll
 }
 
-func (ui *UI) crateParameters(p Parameters) *widget.Container {
+func (ui *UI) crateParameters(p []ParameterSection) *widget.Container {
 	root := widget.NewContainer(
 		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		rowLayout(widget.DirectionVertical, 4, 0),
@@ -64,7 +22,7 @@ func (ui *UI) crateParameters(p Parameters) *widget.Container {
 		),
 	)
 
-	for _, sec := range p.Sections {
+	for _, sec := range p {
 		root.AddChild(ui.crateParametersSection(sec))
 	}
 

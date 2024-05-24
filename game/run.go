@@ -88,7 +88,8 @@ func initGame(g *Game, parameters map[string]any) error {
 	})
 
 	g.Model.AddUISystem(&sys.RenderUI{})
-	g.Model.AddSystem(&sys.Tick{})
+
+	g.Systems = append(g.Systems, &sys.Tick{})
 
 	g.Model.Initialize()
 	g.InitializeRun()
