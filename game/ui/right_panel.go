@@ -28,6 +28,11 @@ func (ui *UI) createRightPanel() *widget.Container {
 					{
 						Drawer: &plot.TimeSeries{
 							Observer: &obs.WorkerCohorts{},
+							Labels: plot.Labels{
+								Title: "Worker cohorts",
+								X:     "Time [d]",
+								Y:     "Count",
+							},
 						},
 					},
 					{Drawer: &plot.Dummy{}},

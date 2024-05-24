@@ -37,8 +37,10 @@ func (ui *UI) UI() *ebitenui.UI {
 }
 
 func (ui *UI) Update() {
-	for i := range ui.images {
-		ui.images[i].Update(ui.world)
+	if !ui.speed.Pause {
+		for i := range ui.images {
+			ui.images[i].Update(ui.world)
+		}
 	}
 
 	ui.UI().Update()

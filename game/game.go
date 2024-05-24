@@ -3,6 +3,7 @@ package game
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/mlange-42/arche-model/model"
+	"github.com/mlange-42/arche/ecs"
 	"github.com/mlange-42/beecs-ui/game/res"
 )
 
@@ -11,6 +12,9 @@ type Game struct {
 	Model  *model.Model
 	Screen res.Screen
 	Mouse  res.Mouse
+
+	Systems   []model.System
+	gameSpeed *res.GameSpeed
 
 	canvasHelper *canvasHelper
 }
@@ -31,6 +35,14 @@ func (g *Game) Initialize() {
 	ebiten.SetWindowTitle("beecs-ui")
 }
 
+// Initialize a new run.
+func (g *Game) InitializeRun() {
+	g.gameSpeed = ecs.GetResource[res.GameSpeed](&g.Model.World)
+	for _, sys := range g.Systems {
+		sys.Initialize(&g.Model.World)
+	}
+}
+
 // Run the game.
 func (g *Game) Run() error {
 	if err := ebiten.RunGame(g); err != nil {
@@ -48,7 +60,15 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 // Update the game.
 func (g *Game) Update() error {
 	g.updateMouse()
-	g.Model.Update()
+
+	if !g.gameSpeed.Pause {
+		g.Model.Update()
+	}
+
+	for _, sys := range g.Systems {
+		sys.Update(&g.Model.World)
+	}
+
 	return nil
 }
 
@@ -58,6 +78,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.Screen.Width = screen.Bounds().Dx()
 	g.Screen.Height = screen.Bounds().Dy()
 	g.Model.UpdateUI()
+}
+
+// Reset the game.
+func (g *Game) Reset() {
+	g.Systems = g.Systems[:0]
 }
 
 func (g *Game) updateMouse() {

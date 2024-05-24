@@ -40,6 +40,7 @@ func initGame(g *Game, parameters map[string]any) error {
 	ebiten.SetVsyncEnabled(true)
 	ebiten.SetTPS(TPS)
 
+	g.Reset()
 	g.Model = arche.New()
 
 	p := params.Default()
@@ -70,24 +71,27 @@ func initGame(g *Game, parameters map[string]any) error {
 		}
 	}
 
-	g.Model.AddSystem(&sys.InitUI{
+	g.Systems = append(g.Systems, &sys.InitUI{
 		ResetFn: func(parameters map[string]any) {
 			run(g, parameters)
 		},
 	})
-	g.Model.AddSystem(&sys.UpdateUI{})
 
-	g.Model.AddSystem(&sys.GameControls{
+	g.Systems = append(g.Systems, &sys.UpdateUI{})
+
+	g.Systems = append(g.Systems, &sys.GameControls{
 		PauseKey:      ebiten.KeySpace,
 		StepKey:       ebiten.KeyArrowRight,
 		SlowerKey:     '[',
 		FasterKey:     ']',
 		FullscreenKey: ebiten.KeyF11,
 	})
+
 	g.Model.AddUISystem(&sys.RenderUI{})
 	g.Model.AddSystem(&sys.Tick{})
 
 	g.Model.Initialize()
+	g.InitializeRun()
 
 	return nil
 }
