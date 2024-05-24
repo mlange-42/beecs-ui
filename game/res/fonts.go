@@ -11,7 +11,7 @@ import (
 	"golang.org/x/image/font/sfnt"
 )
 
-const fontFile = "SourceCodePro-Regular.ttf"
+const fontFile = "mplus-1m-regular.ttf"
 
 const fontSize = 18
 
