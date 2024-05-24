@@ -11,6 +11,7 @@ import (
 // UI resource.Represents the complete game UI.
 type UI struct {
 	ui      *ebitenui.UI
+	world   *ecs.World
 	time    *res.GameTick
 	fonts   *res.Fonts
 	sprites *res.Sprites
@@ -37,6 +38,7 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 
 func New(world *ecs.World, time *res.GameTick, fonts *res.Fonts, sprites *res.Sprites, speed *res.GameSpeed, resetFn func()) UI {
 	ui := UI{
+		world:   world,
 		time:    time,
 		fonts:   fonts,
 		sprites: sprites,
@@ -74,6 +76,28 @@ func (ui *UI) createUI() *widget.Container {
 	)
 
 	root.AddChild(ui.createTopBar())
+	root.AddChild(ui.createMainPanel())
 
 	return root
+}
+
+func (ui *UI) createMainPanel() *widget.Container {
+	root := widget.NewContainer(
+		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		gridLayout([]bool{false, true}, []bool{true}, 4, 0),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
+			widget.WidgetOpts.MinSize(40, 10),
+		),
+	)
+
+	root.AddChild(ui.createLeftPanel())
+	root.AddChild(ui.createRightPanel())
+
+	return root
+}
+
+func (ui *UI) createRightPanel() *widget.Container {
+	scroll, _ := ui.scrollPanel(0)
+	return scroll
 }

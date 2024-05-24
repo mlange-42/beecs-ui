@@ -43,6 +43,8 @@ func initGame(g *Game) error {
 	g.Model = arche.New()
 
 	p := params.Default()
+	p.Termination.MaxTicks = 0
+
 	model.Default(&p, g.Model)
 
 	ecs.AddResource(&g.Model.World, &res.GameSpeed{

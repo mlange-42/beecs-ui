@@ -1,7 +1,11 @@
 package ui
 
 import (
+	"log"
+	"math"
+
 	"github.com/ebitenui/ebitenui/widget"
+	"github.com/mlange-42/beecs/model"
 )
 
 func (ui *UI) defaultButtonImage() *widget.ButtonImage {
@@ -56,14 +60,14 @@ func (ui *UI) label(text string) *widget.Text {
 	)
 }
 
-func (ui *UI) slider(min, max, value int, width int, handler func(args *widget.SliderChangedEventArgs)) *widget.Slider {
+func (ui *UI) slider(min, max, value int, width int, stretchRow bool, handler func(args *widget.SliderChangedEventArgs)) *widget.Slider {
 	slider := widget.NewSlider(
 		widget.SliderOpts.Direction(widget.DirectionHorizontal),
 		widget.SliderOpts.MinMax(min, max),
 		widget.SliderOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
 				Position: widget.RowLayoutPositionCenter,
-				Stretch:  false,
+				Stretch:  stretchRow,
 			}),
 			widget.WidgetOpts.MinSize(width, 6),
 		),
@@ -88,4 +92,149 @@ func (ui *UI) slider(min, max, value int, width int, handler func(args *widget.S
 	slider.Current = value
 
 	return slider
+}
+
+func (ui *UI) parameterSliderF(min, max float64, precision float64, width int, parameter string) *widget.Container {
+	root := widget.NewContainer(
+		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		rowLayout(widget.DirectionHorizontal, 4),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Stretch: true,
+			}),
+			widget.WidgetOpts.MinSize(200, 10),
+		),
+	)
+
+	label := ui.label(parameter)
+
+	v, err := model.GetParameter(ui.world, parameter)
+	if err != nil {
+		log.Fatal(err)
+	}
+	vv, ok := v.(float64)
+	if !ok {
+		log.Fatal("error converting parameter value to float")
+	}
+	value := int(vv * precision)
+	slider := ui.slider(int(min*precision), int(max*precision), value, width, true, func(args *widget.SliderChangedEventArgs) {
+		err := model.SetParameter(ui.world, parameter, float64(args.Current)/precision)
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+
+	root.AddChild(label)
+	root.AddChild(slider)
+
+	return root
+}
+
+func (ui *UI) parameterSliderI(min, max int, width int, parameter string) *widget.Container {
+	root := widget.NewContainer(
+		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		rowLayout(widget.DirectionVertical, 4),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Stretch: true,
+			}),
+			widget.WidgetOpts.MinSize(200, 10),
+		),
+	)
+
+	label := ui.label(parameter)
+
+	v, err := model.GetParameter(ui.world, parameter)
+	if err != nil {
+		log.Fatal(err)
+	}
+	vv, ok := v.(int64)
+	if !ok {
+		log.Fatal("error converting parameter value to int")
+	}
+	slider := ui.slider(min, max, int(vv), width, true, func(args *widget.SliderChangedEventArgs) {
+		err := model.SetParameter(ui.world, parameter, args.Current)
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+
+	root.AddChild(label)
+	root.AddChild(slider)
+
+	return root
+}
+
+func (ui *UI) scrollPanel(width int) (*widget.Container, *widget.Container) {
+	root := widget.NewContainer(
+		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
+		// the container will use an grid layout to layout its ScrollableContainer and Slider
+		widget.ContainerOpts.Layout(widget.NewGridLayout(
+			widget.GridLayoutOpts.Columns(2),
+			widget.GridLayoutOpts.Spacing(2, 0),
+			widget.GridLayoutOpts.Stretch([]bool{true, false}, []bool{true}),
+		)),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.GridLayoutData{}),
+			widget.WidgetOpts.MinSize(width, 10),
+		),
+	)
+
+	content := widget.NewContainer(
+		widget.ContainerOpts.Layout(widget.NewRowLayout(
+			widget.RowLayoutOpts.Direction(widget.DirectionVertical),
+			widget.RowLayoutOpts.Spacing(4),
+		)),
+	)
+
+	scrollContainer := widget.NewScrollContainer(
+		widget.ScrollContainerOpts.Content(content),
+		widget.ScrollContainerOpts.StretchContentWidth(),
+		widget.ScrollContainerOpts.Padding(widget.NewInsetsSimple(2)),
+		widget.ScrollContainerOpts.Image(&widget.ScrollContainerImage{
+			Idle: ui.sprites.Background,
+			Mask: ui.sprites.Background,
+		}),
+	)
+	root.AddChild(scrollContainer)
+
+	//Create a function to return the page size used by the slider
+	pageSizeFunc := func() int {
+		ps := int(math.Round(float64(scrollContainer.ViewRect().Dy()) / float64(content.GetWidget().Rect.Dy()) * 1000))
+		return ps
+	}
+
+	vSlider := widget.NewSlider(
+		widget.SliderOpts.Direction(widget.DirectionVertical),
+		widget.SliderOpts.MinMax(0, 1000),
+		widget.SliderOpts.PageSizeFunc(pageSizeFunc),
+		widget.SliderOpts.ChangedHandler(func(args *widget.SliderChangedEventArgs) {
+			scrollContainer.ScrollTop = float64(args.Slider.Current) / 1000
+		}),
+		widget.SliderOpts.Images(
+			&widget.SliderTrackImage{
+				Idle:  ui.sprites.BackgroundHover,
+				Hover: ui.sprites.BackgroundHover,
+			},
+			&widget.ButtonImage{
+				Idle:    ui.sprites.BackgroundPressed,
+				Hover:   ui.sprites.BackgroundPressed,
+				Pressed: ui.sprites.BackgroundPressed,
+			},
+		),
+	)
+	//Set the slider's position if the scrollContainer is scrolled by other means than the slider
+	scrollContainer.GetWidget().ScrolledEvent.AddHandler(func(args interface{}) {
+		a := args.(*widget.WidgetScrolledEventArgs)
+		p := pageSizeFunc() / 3
+		if p < 1 {
+			p = 1
+		}
+		dy := math.Copysign(1.0, a.Y)
+		vSlider.Current -= int(math.Round(dy * float64(p)))
+	})
+
+	root.AddChild(vSlider)
+
+	return root, content
 }
