@@ -30,12 +30,14 @@ func (s *UpdateUI) Update(world *ecs.World) {
 	date := time.Date(0, time.January, 1, 0, 0, 0, 0, time.UTC).Add(time.Hour * 24 * time.Duration(tick))
 
 	s.ui.InfoLabel.Label = fmt.Sprintf("Tick %5d  %s", tick, date.Format("Jan _2 06"))
-
 	if s.speed.Pause {
 		s.ui.PauseButton.Text().Label = ">>"
 	} else {
 		s.ui.PauseButton.Text().Label = "||"
 	}
+
+	tps := s.speed.Speeds[s.speed.SpeedIndex]
+	s.ui.SpeedLabel.Label = fmt.Sprintf("%4d TPS", tps)
 
 	s.ui.Update()
 }
