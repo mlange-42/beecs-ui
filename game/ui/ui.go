@@ -61,11 +61,11 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 	}
 
 	// TODO render on step
-	if resize || !ui.speed.Pause {
-		for i := range ui.images {
-			ui.images[i].Draw(ui.world)
-		}
+	//if resize || !ui.speed.Pause {
+	for i := range ui.images {
+		ui.images[i].Draw(ui.world)
 	}
+	//}
 
 	ui.UI().Draw(screen)
 }
