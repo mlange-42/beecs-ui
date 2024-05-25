@@ -1,0 +1,72 @@
+{
+    "obs.AgeStructure": {
+        "Drawer": "plot.Lines",
+        "DrawerConfig": {
+            "Labels": {
+                "Title": "Worker age classes",
+                "X":     "Age [d]",
+                "Y":     "Count"
+            },
+            "YLim": [0, 2000],
+            "DrawInterval": 5
+        },
+        "Observer": "obs.AgeStructure"
+    },
+    "obs.WorkerCohorts": {
+        "Drawer": "plot.TimeSeries",
+        "DrawerConfig": {
+            "Labels": {
+                "Title": "Worker cohorts",
+                "X":     "Time [d]",
+                "Y":     "Count"
+            },
+            "MaxRows":      730,
+            "DrawInterval": 5
+        },
+        "Observer": "obs.WorkerCohorts",
+        "ObserverConfig": {"Cumulative": false}
+    },
+    "obs.WorkerCohortsCumulative": {
+        "Drawer": "plot.TimeSeries",
+        "DrawerConfig": {
+            "Labels": {
+                "Title": "Worker cohorts",
+                "X":     "Time [d]",
+                "Y":     "Count"
+            },
+            "MaxRows":      730,
+            "DrawInterval": 5
+        },
+        "Observer": "obs.WorkerCohorts",
+        "ObserverConfig": {"Cumulative": true}
+    },
+    "obs.Stores": {
+        "Drawer": "plot.TimeSeries",
+        "DrawerConfig": {
+            "Labels": {
+                "Title": "In-hive stores",
+                "X":     "Time [d]",
+                "Y":     "Amount [kg]"
+            },
+            "Columns":      ["Honey", "Pollen x20"],
+            "MaxRows":      730,
+            "DrawInterval": 5
+        },
+        "Observer": "obs.Stores",
+        "ObserverConfig": {"PollenFactor": 20}
+    },
+    "obs.ForagingStats": {
+        "Drawer": "plot.Lines",
+        "DrawerConfig": {
+            "Labels": {
+                "Title": "Foraging activity",
+                "X":     "Time [rounds]",
+                "Y":     "Foragers"
+            },
+            "X":            "Round",
+            "XLim":         [0, 42],
+            "DrawInterval": 5
+        },
+        "Observer": "obs.ForagingStats"
+    }
+}

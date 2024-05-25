@@ -28,6 +28,7 @@ type layoutRowJs struct {
 }
 
 type layoutPanelJs struct {
+	Template       string
 	Drawer         string
 	DrawerConfig   entry
 	Observer       string

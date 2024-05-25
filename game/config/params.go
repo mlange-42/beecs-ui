@@ -6,6 +6,7 @@ type ParameterSection struct {
 }
 
 type Parameter struct {
+	Template    string
 	Parameter   string
 	SliderInt   *SliderInt
 	SliderFloat *SliderFloat

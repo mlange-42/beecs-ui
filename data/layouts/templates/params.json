@@ -1,0 +1,29 @@
+{
+    "params.InitialPopulation.Count": {
+        "Parameter": "params.InitialPopulation.Count",
+        "SliderInt": {
+            "Min": 1000,
+            "Max": 50000
+        }
+    },
+    "params.HandlingTime.ConstantHandlingTime": {
+        "Parameter": "params.HandlingTime.ConstantHandlingTime",
+        "Toggle": {}
+    },
+    "params.HandlingTime.NectarGathering": {
+        "Parameter": "params.HandlingTime.NectarGathering",
+        "SliderFloat": {
+            "Min":       60,
+            "Max":       3600,
+            "Precision": 1
+        }
+    },
+    "params.HandlingTime.PollenGathering": {
+        "Parameter": "params.HandlingTime.PollenGathering",
+        "SliderFloat": {
+            "Min":       60,
+            "Max":       3600,
+            "Precision": 1
+        }
+    }
+}
