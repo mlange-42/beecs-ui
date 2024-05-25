@@ -1,0 +1,113 @@
+{
+    "Parameters": [
+        {
+            "Text": "Initialize",
+            "Parameters": [
+                {
+					"Parameter": "params.InitialPopulation.Count",
+					"SliderInt": {
+						"Min": 1000,
+						"Max": 50000
+					}
+				}
+            ]
+        },
+        {
+            "Text": "HandlingTime",
+            "Parameters": [
+                {
+					"Parameter": "params.HandlingTime.ConstantHandlingTime",
+					"Toggle": {}
+				},
+                {
+					"Parameter": "params.HandlingTime.NectarGathering",
+					"SliderFloat": {
+						"Min":       60,
+						"Max":       3600,
+						"Precision": 1
+					}
+				},
+				{
+					"Parameter": "params.HandlingTime.PollenGathering",
+					"SliderFloat": {
+						"Min":       60,
+						"Max":       3600,
+						"Precision": 1
+					}
+				}
+            ]
+        }
+    ],
+    "Rows": [
+        {
+			"Height": 300,
+			"Panels": [
+				{
+                    "Drawer": "plot.Lines",
+					"DrawerConfig": {
+						"Labels": {
+							"Title": "Worker age classes",
+							"X":     "Age [d]",
+							"Y":     "Count"
+						},
+						"YLim": [0, 2000],
+						"DrawInterval": 5
+					},
+					"Observer": "obs.AgeStructure"
+				}
+            ]
+		},
+		{
+			"Height": 260,
+			"Panels": [
+				{
+                    "Drawer": "plot.TimeSeries",
+					"DrawerConfig": {
+						"Labels": {
+							"Title": "Worker cohorts",
+							"X":     "Time [d]",
+							"Y":     "Count"
+						},
+						"MaxRows":      730,
+						"DrawInterval": 5
+					},
+					"Observer": "obs.WorkerCohorts",
+					"ObserverConfig": {"Cumulative": true}
+				}, {
+                    "Drawer": "plot.TimeSeries",
+					"DrawerConfig": {
+						"Labels": {
+							"Title": "In-hive stores",
+							"X":     "Time [d]",
+							"Y":     "Amount [kg]"
+						},
+						"Columns":      ["Honey", "Pollen x20"],
+						"MaxRows":      730,
+						"DrawInterval": 5
+					},
+					"Observer": "obs.Stores",
+					"ObserverConfig": {"PollenFactor": 20}
+				}
+			]
+		},
+		{
+			"Height": 300,
+			"Panels": [
+				{
+                    "Drawer": "plot.Lines",
+					"DrawerConfig": {
+						"Labels": {
+							"Title": "Foraging activity",
+							"X":     "Time [rounds]",
+							"Y":     "Foragers"
+						},
+						"X":            "Round",
+						"XLim":         [0, 42],
+						"DrawInterval": 5
+					},
+					"Observer": "obs.ForagingStats"
+				}
+			]
+		}
+    ]
+}

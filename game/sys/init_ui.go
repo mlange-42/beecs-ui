@@ -1,19 +1,23 @@
 package sys
 
 import (
+	"io/fs"
+
 	"github.com/mlange-42/arche/ecs"
 	"github.com/mlange-42/beecs-ui/game/ui"
 )
 
 // InitUI system.
 type InitUI struct {
-	ResetFn func(parameters map[string]any)
-	ui      ui.UI
+	ResetFn  func(parameters map[string]any)
+	GameData fs.FS
+	Layout   string
+	ui       ui.UI
 }
 
 // Initialize the system
 func (s *InitUI) Initialize(world *ecs.World) {
-	s.ui = ui.New(world, s.ResetFn)
+	s.ui = ui.New(world, s.GameData, s.Layout, s.ResetFn)
 
 	ecs.AddResource(world, &s.ui)
 }
