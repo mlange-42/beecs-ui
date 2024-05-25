@@ -2,9 +2,10 @@ package ui
 
 import (
 	"github.com/ebitenui/ebitenui/widget"
+	"github.com/mlange-42/beecs-ui/game/config"
 )
 
-func (ui *UI) createRightPanel(layout *Layout) *widget.Container {
+func (ui *UI) createRightPanel(layout *config.Layout) *widget.Container {
 	scroll, content := ui.scrollPanel(0)
 
 	root := widget.NewContainer(
@@ -29,7 +30,7 @@ func (ui *UI) createRightPanel(layout *Layout) *widget.Container {
 	return scroll
 }
 
-func (ui *UI) createLayoutRow(row *LayoutRow) *widget.Container {
+func (ui *UI) createLayoutRow(row *config.LayoutRow) *widget.Container {
 	cols := len(row.Panels)
 	stretch := make([]bool, cols)
 	for i := range stretch {

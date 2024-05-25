@@ -1,12 +1,18 @@
 package ui
 
 import (
+	"fmt"
 	"image"
+	"io/fs"
+	"log"
+	"os"
+	"strings"
 
 	"github.com/ebitenui/ebitenui"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/mlange-42/arche/ecs"
+	"github.com/mlange-42/beecs-ui/game/config"
 	"github.com/mlange-42/beecs-ui/game/res"
 )
 
@@ -30,6 +36,47 @@ type UI struct {
 	layoutUpdated bool
 
 	resetFn func(parameters map[string]any)
+}
+
+func New(world *ecs.World, data fs.FS, layout string, resetFn func(parameters map[string]any)) UI {
+	ui := UI{
+		world:   world,
+		time:    ecs.GetResource[res.GameTick](world),
+		fonts:   ecs.GetResource[res.Fonts](world),
+		sprites: ecs.GetResource[res.Sprites](world),
+		speed:   ecs.GetResource[res.GameSpeed](world),
+		resetFn: resetFn,
+	}
+
+	rootContainer := widget.NewContainer(
+		widget.ContainerOpts.Layout(widget.NewAnchorLayout()),
+	)
+
+	var lay *config.Layout
+	var err error
+	if strings.HasSuffix(layout, ".json") {
+		lay, err = config.FromFile(os.DirFS("."), layout,
+			data, "data/layouts/templates/params.json", "data/layouts/templates/panels.json")
+	} else {
+		lay, err = config.FromFile(data, fmt.Sprintf("data/layouts/%s.json", layout),
+			data, "data/layouts/templates/params.json", "data/layouts/templates/panels.json")
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	rootContainer.AddChild(ui.createUI(lay))
+
+	eui := ebitenui.UI{
+		Container: rootContainer,
+	}
+	ui.ui = &eui
+
+	for i := range ui.images {
+		ui.images[i].Initialize(world)
+	}
+
+	return ui
 }
 
 func (ui *UI) UI() *ebitenui.UI {
@@ -60,45 +107,14 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 		ui.layoutUpdated = !ui.layoutUpdated
 	}
 
-	// TODO render on step
-	//if resize || !ui.speed.Pause {
 	for i := range ui.images {
 		ui.images[i].Draw(ui.world)
 	}
-	//}
 
 	ui.UI().Draw(screen)
 }
 
-func New(world *ecs.World, resetFn func(parameters map[string]any)) UI {
-	ui := UI{
-		world:   world,
-		time:    ecs.GetResource[res.GameTick](world),
-		fonts:   ecs.GetResource[res.Fonts](world),
-		sprites: ecs.GetResource[res.Sprites](world),
-		speed:   ecs.GetResource[res.GameSpeed](world),
-		resetFn: resetFn,
-	}
-
-	rootContainer := widget.NewContainer(
-		widget.ContainerOpts.Layout(widget.NewAnchorLayout()),
-	)
-
-	rootContainer.AddChild(ui.createUI())
-
-	eui := ebitenui.UI{
-		Container: rootContainer,
-	}
-	ui.ui = &eui
-
-	for i := range ui.images {
-		ui.images[i].Initialize(world)
-	}
-
-	return ui
-}
-
-func (ui *UI) createUI() *widget.Container {
+func (ui *UI) createUI(layout *config.Layout) *widget.Container {
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		gridLayout([]bool{true}, []bool{false, true}, 4, 0),
@@ -114,12 +130,12 @@ func (ui *UI) createUI() *widget.Container {
 	)
 
 	root.AddChild(ui.createTopBar())
-	root.AddChild(ui.createMainPanel())
+	root.AddChild(ui.createMainPanel(layout))
 
 	return root
 }
 
-func (ui *UI) createMainPanel() *widget.Container {
+func (ui *UI) createMainPanel(layout *config.Layout) *widget.Container {
 	root := widget.NewContainer(
 		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		gridLayout([]bool{false, true}, []bool{true}, 4, 0),
@@ -129,8 +145,8 @@ func (ui *UI) createMainPanel() *widget.Container {
 		),
 	)
 
-	root.AddChild(ui.createLeftPanel(&defaultLayout))
-	root.AddChild(ui.createRightPanel(&defaultLayout))
+	root.AddChild(ui.createLeftPanel(layout))
+	root.AddChild(ui.createRightPanel(layout))
 
 	return root
 }

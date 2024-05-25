@@ -64,21 +64,6 @@ func (p *ImagePanel) Draw(world *ecs.World) {
 	}
 }
 
-type Layout struct {
-	Parameters []ParameterSection
-	Rows       []LayoutRow
-}
-
-type LayoutRow struct {
-	Height int
-	Panels []LayoutPanel
-}
-
-type LayoutPanel struct {
-	Drawer   plot.Drawer
-	Observer any
-}
-
 // Calculate scale correction for scaled monitors.
 func calcScaleCorrection() float64 {
 	width := 100.0

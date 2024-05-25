@@ -1,8 +1,11 @@
 package ui
 
-import "github.com/ebitenui/ebitenui/widget"
+import (
+	"github.com/ebitenui/ebitenui/widget"
+	"github.com/mlange-42/beecs-ui/game/config"
+)
 
-func (ui *UI) createLeftPanel(layout *Layout) *widget.Container {
+func (ui *UI) createLeftPanel(layout *config.Layout) *widget.Container {
 	scroll, content := ui.scrollPanel(260)
 
 	content.AddChild(ui.crateParameters(layout.Parameters))
@@ -10,7 +13,7 @@ func (ui *UI) createLeftPanel(layout *Layout) *widget.Container {
 	return scroll
 }
 
-func (ui *UI) crateParameters(p []ParameterSection) *widget.Container {
+func (ui *UI) crateParameters(p []config.ParameterSection) *widget.Container {
 	root := widget.NewContainer(
 		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		rowLayout(widget.DirectionVertical, 4, 0),
@@ -29,7 +32,7 @@ func (ui *UI) crateParameters(p []ParameterSection) *widget.Container {
 	return root
 }
 
-func (ui *UI) crateParametersSection(p ParameterSection) *widget.Container {
+func (ui *UI) crateParametersSection(p config.ParameterSection) *widget.Container {
 	root := widget.NewContainer(
 		//widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		rowLayout(widget.DirectionVertical, 4, 4),

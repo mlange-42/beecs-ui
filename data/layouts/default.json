@@ -1,0 +1,39 @@
+{
+    "Parameters": [
+        {
+            "Text": "Initialize",
+            "Parameters": [
+                {"Template": "params.InitialPopulation.Count"}
+            ]
+        },
+        {
+            "Text": "HandlingTime",
+            "Parameters": [
+                {"Template": "params.HandlingTime.ConstantHandlingTime"},
+                {"Template": "params.HandlingTime.NectarGathering"},
+				{"Template": "params.HandlingTime.PollenGathering"}
+            ]
+        }
+    ],
+    "Rows": [
+        {
+			"Height": 300,
+			"Panels": [
+				{"Template": "obs.AgeStructure"}
+            ]
+		},
+		{
+			"Height": 260,
+			"Panels": [
+				{"Template": "obs.WorkerCohortsCumulative"},
+				{"Template": "obs.Stores"}
+			]
+		},
+		{
+			"Height": 300,
+			"Panels": [
+				{"Template": "obs.ForagingStats"}
+			]
+		}
+    ]
+}

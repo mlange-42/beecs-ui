@@ -76,6 +76,8 @@ func initGame(g *Game, parameters map[string]any) error {
 		ResetFn: func(parameters map[string]any) {
 			run(g, parameters)
 		},
+		GameData: GameData,
+		Layout:   "default",
 	})
 
 	g.Systems = append(g.Systems, &sys.UpdateUI{})

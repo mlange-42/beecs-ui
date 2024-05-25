@@ -9,6 +9,7 @@ import (
 
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/mlange-42/beecs-ui/game/config"
 	"github.com/mlange-42/beecs/model"
 	"gonum.org/v1/plot/vg"
 	"gonum.org/v1/plot/vg/vgimg"
@@ -375,7 +376,7 @@ func (ui *UI) scrollPanel(width int) (*widget.Container, *widget.Container) {
 	return root, content
 }
 
-func (ui *UI) imagePanel(panel *LayoutPanel, height int) *widget.Container {
+func (ui *UI) imagePanel(panel *config.LayoutPanel, height int) *widget.Container {
 	img := ebiten.NewImage(1, 1)
 	img.Fill(color.RGBA{180, 180, 180, 255})
 
