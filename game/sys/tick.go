@@ -20,7 +20,6 @@ func (s *Tick) Initialize(world *ecs.World) {
 
 // Update the system
 func (s *Tick) Update(world *ecs.World) {
-	s.time.Get().RenderTick++
 	if !s.speed.Get().Pause {
 		s.time.Get().Tick++
 	}

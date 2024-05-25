@@ -5,7 +5,6 @@ import (
 
 	"github.com/mlange-42/arche-model/observer"
 	"github.com/mlange-42/arche/ecs"
-	"github.com/mlange-42/beecs-ui/game/res"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg/draw"
@@ -24,12 +23,13 @@ type TimeSeries struct {
 	Labels         Labels // Labels for plot and axes. Optional.
 	MaxRows        int    // Maximum number of rows to keep. Zero means unlimited. Optional.
 
-	indices []int
-	headers []string
-	series  []plotter.XYs
-	scale   float64
-	step    int64
-	time    *res.GameTick
+	indices    []int
+	headers    []string
+	series     []plotter.XYs
+	scale      float64
+	step       int64
+	drawStep   uint64
+	hasChanged bool
 }
 
 // append a y value to each series, with a common x value.
@@ -44,8 +44,6 @@ func (t *TimeSeries) append(x float64, values []float64) {
 
 // Initialize the drawer.
 func (t *TimeSeries) Initialize(w *ecs.World, obs any) error {
-	t.time = ecs.GetResource[res.GameTick](w)
-
 	row, ok := obs.(observer.Row)
 	if !ok {
 		return fmt.Errorf("unable to cast %T to row observer", obs)
@@ -85,14 +83,20 @@ func (t *TimeSeries) Update(w *ecs.World) {
 	t.observer.Update(w)
 	if t.UpdateInterval <= 1 || t.step%int64(t.UpdateInterval) == 0 {
 		t.append(float64(t.step), t.observer.Values(w))
+		t.hasChanged = true
 	}
 	t.step++
 }
 
+func (t *TimeSeries) SetChanged() {
+	t.hasChanged = true
+}
+
 // Draw the drawer.
-func (t *TimeSeries) Draw(w *ecs.World, canvas *vgimg.Canvas) {
-	if t.DrawInterval > 1 && t.time.RenderTick%int64(t.DrawInterval) != 0 {
-		return
+func (t *TimeSeries) Draw(w *ecs.World, canvas *vgimg.Canvas) bool {
+	if !t.hasChanged || (t.DrawInterval > 1 && t.drawStep%uint64(t.DrawInterval) != 0) {
+		t.drawStep++
+		return false
 	}
 
 	p := plot.New()
@@ -114,4 +118,8 @@ func (t *TimeSeries) Draw(w *ecs.World, canvas *vgimg.Canvas) {
 	}
 
 	p.Draw(draw.New(canvas))
+
+	t.drawStep++
+	t.hasChanged = false
+	return true
 }

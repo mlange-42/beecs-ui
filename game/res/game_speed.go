@@ -16,6 +16,4 @@ type GameSpeed struct {
 type GameTick struct {
 	// Current update tick. Stops when the game is paused.
 	Tick int64
-	// Current render tick. Does not stop when the game is paused.
-	RenderTick int64
 }
