@@ -7,6 +7,7 @@ import (
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/mlange-42/arche/ecs"
+	"github.com/mlange-42/beecs-ui/game/config"
 	"github.com/mlange-42/beecs-ui/game/res"
 )
 
@@ -129,8 +130,8 @@ func (ui *UI) createMainPanel() *widget.Container {
 		),
 	)
 
-	root.AddChild(ui.createLeftPanel(&defaultLayout))
-	root.AddChild(ui.createRightPanel(&defaultLayout))
+	root.AddChild(ui.createLeftPanel(&config.Default))
+	root.AddChild(ui.createRightPanel(&config.Default))
 
 	return root
 }

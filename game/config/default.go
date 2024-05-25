@@ -1,11 +1,11 @@
-package ui
+package config
 
 import (
 	"github.com/mlange-42/beecs-ui/game/plot"
 	"github.com/mlange-42/beecs/obs"
 )
 
-var defaultLayout = Layout{
+var Default = Layout{
 	Parameters: []ParameterSection{
 		{
 			Text: "Initialization",
