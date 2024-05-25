@@ -6,7 +6,6 @@ import (
 
 	"github.com/mlange-42/arche-model/observer"
 	"github.com/mlange-42/arche/ecs"
-	"github.com/mlange-42/beecs-ui/game/res"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg/draw"
@@ -33,13 +32,13 @@ type Lines struct {
 	headers []string
 	series  []plotter.XYs
 	scale   float64
-	time    *res.GameTick
+
+	drawStep   uint64
+	hasChanged bool
 }
 
 // Initialize the drawer.
 func (l *Lines) Initialize(w *ecs.World, obs any) error {
-	l.time = ecs.GetResource[res.GameTick](w)
-
 	table, castOk := obs.(observer.Table)
 	if !castOk {
 		return fmt.Errorf("unable to cast %T to table observer", obs)
@@ -83,15 +82,21 @@ func (l *Lines) Initialize(w *ecs.World, obs any) error {
 	return nil
 }
 
+func (l *Lines) SetChanged() {
+	l.hasChanged = true
+}
+
 // Update the drawer.
 func (l *Lines) Update(w *ecs.World) {
 	l.observer.Update(w)
+	l.hasChanged = true
 }
 
 // Draw the drawer.
-func (l *Lines) Draw(w *ecs.World, canvas *vgimg.Canvas) {
-	if l.DrawInterval > 1 && l.time.RenderTick%int64(l.DrawInterval) != 0 {
-		return
+func (l *Lines) Draw(w *ecs.World, canvas *vgimg.Canvas) bool {
+	if !l.hasChanged || (l.DrawInterval > 1 && l.drawStep%uint64(l.DrawInterval) != 0) {
+		l.drawStep++
+		return false
 	}
 
 	l.updateData(w)
@@ -126,6 +131,10 @@ func (l *Lines) Draw(w *ecs.World, canvas *vgimg.Canvas) {
 	}
 
 	p.Draw(draw.New(canvas))
+
+	l.drawStep++
+	l.hasChanged = false
+	return true
 }
 
 func (l *Lines) updateData(w *ecs.World) {

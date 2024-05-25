@@ -48,20 +48,20 @@ func (p *ImagePanel) Resize() {
 	img := ebiten.NewImage(tempImg.Bounds().Dx(), tempImg.Bounds().Dy())
 	p.Graphic.Image = img
 
-	p.Container.RemoveChild(p.Graphic)
 	p.Container.AddChild(p.Graphic)
+	p.Drawer.SetChanged()
 }
 
 func (p *ImagePanel) Draw(world *ecs.World) {
-	p.Drawer.Draw(world, p.canvas)
+	if p.Drawer.Draw(world, p.canvas) {
+		img := p.canvas.Image()
 
-	img := p.canvas.Image()
-
-	rgb, ok := img.(*image.RGBA)
-	if !ok {
-		log.Fatal("not an RGBA image")
+		rgb, ok := img.(*image.RGBA)
+		if !ok {
+			log.Fatal("not an RGBA image")
+		}
+		p.Graphic.Image.WritePixels(rgb.Pix)
 	}
-	p.Graphic.Image.WritePixels(rgb.Pix)
 }
 
 type Layout struct {

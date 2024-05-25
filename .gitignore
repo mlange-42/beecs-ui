@@ -1,6 +1,7 @@
 *.exe
 *.svg
 *.wasm
+*.pprof
 /save/
 /maps/
 /user/
