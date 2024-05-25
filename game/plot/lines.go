@@ -6,6 +6,7 @@ import (
 
 	"github.com/mlange-42/arche-model/observer"
 	"github.com/mlange-42/arche/ecs"
+	"github.com/mlange-42/beecs-ui/game/res"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg/draw"
@@ -18,12 +19,13 @@ import (
 // Replaces the complete data by the table provided by the observer on every update.
 // Particularly useful for live histograms.
 type Lines struct {
-	observer observer.Table // Observer providing a data series for lines.
-	X        string         // X column name. Optional. Defaults to row index.
-	Y        []string       // Y column names. Optional. Defaults to all but X column.
-	XLim     [2]float64     // X axis limits. Optional, default auto.
-	YLim     [2]float64     // Y axis limits. Optional, default auto.
-	Labels   Labels         // Labels for plot and axes. Optional.
+	observer     observer.Table // Observer providing a data series for lines.
+	X            string         // X column name. Optional. Defaults to row index.
+	Y            []string       // Y column names. Optional. Defaults to all but X column.
+	XLim         [2]float64     // X axis limits. Optional, default auto.
+	YLim         [2]float64     // Y axis limits. Optional, default auto.
+	Labels       Labels         // Labels for plot and axes. Optional.
+	DrawInterval int
 
 	xIndex   int
 	yIndices []int
@@ -31,16 +33,18 @@ type Lines struct {
 	headers []string
 	series  []plotter.XYs
 	scale   float64
+	time    *res.GameTick
 }
 
 // Initialize the drawer.
 func (l *Lines) Initialize(w *ecs.World, obs any) error {
+	l.time = ecs.GetResource[res.GameTick](w)
+
 	table, castOk := obs.(observer.Table)
 	if !castOk {
 		return fmt.Errorf("unable to cast %T to table observer", obs)
 	}
 	l.observer = table
-
 	l.observer.Initialize(w)
 
 	l.headers = l.observer.Header()
@@ -86,6 +90,10 @@ func (l *Lines) Update(w *ecs.World) {
 
 // Draw the drawer.
 func (l *Lines) Draw(w *ecs.World, canvas *vgimg.Canvas) {
+	if l.DrawInterval > 1 && l.time.RenderTick%int64(l.DrawInterval) != 0 {
+		return
+	}
+
 	l.updateData(w)
 
 	p := plot.New()
