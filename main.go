@@ -6,6 +6,6 @@ import (
 
 func main() {
 	//stop := profile.Start(profile.CPUProfile, profile.ProfilePath("."))
-	game.Run(GameData)
+	game.Run(GameData, "parameters.json")
 	//stop.Stop()
 }
