@@ -68,5 +68,31 @@
             "DrawInterval": 5
         },
         "Observer": "obs.ForagingStats"
+    },
+    "obs.PatchNectar": {
+        "Drawer": "plot.TimeSeries",
+        "DrawerConfig": {
+            "Labels": {
+                "Title": "Patch nectar",
+                "X":     "Time [d]",
+                "Y":     "Amount [L]"
+            },
+            "MaxRows":      730,
+            "DrawInterval": 5
+        },
+        "Observer": "obs.PatchNectar"
+    },
+    "obs.PatchPollen": {
+        "Drawer": "plot.TimeSeries",
+        "DrawerConfig": {
+            "Labels": {
+                "Title": "Patch pollen",
+                "X":     "Time [d]",
+                "Y":     "Amount [g]"
+            },
+            "MaxRows":      730,
+            "DrawInterval": 5
+        },
+        "Observer": "obs.PatchPollen"
     }
 }

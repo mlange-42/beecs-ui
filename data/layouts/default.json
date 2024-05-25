@@ -3,7 +3,8 @@
         {
             "Text": "Initialize",
             "Parameters": [
-                {"Template": "params.InitialPopulation.Count"}
+                {"Template": "params.InitialPopulation.Count"},
+                {"Template": "params.Foragers.SquadronSize"}
             ]
         },
         {
@@ -12,6 +13,12 @@
                 {"Template": "params.HandlingTime.ConstantHandlingTime"},
                 {"Template": "params.HandlingTime.NectarGathering"},
 				{"Template": "params.HandlingTime.PollenGathering"}
+            ]
+        },
+        {
+            "Text": "Nursing",
+            "Parameters": [
+                {"Template": "params.Nursing.EggNursingLimit"}
             ]
         }
     ],
@@ -32,7 +39,8 @@
 		{
 			"Height": 300,
 			"Panels": [
-				{"Template": "obs.ForagingStats"}
+				{"Template": "obs.PatchNectar"},
+				{"Template": "obs.PatchPollen"}
 			]
 		}
     ]
