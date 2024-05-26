@@ -48,10 +48,10 @@ func (ui *UI) crateParametersSection(p config.ParameterSection) *widget.Containe
 
 	for _, par := range p.Parameters {
 		if par.SliderFloat != nil {
-			root.AddChild(ui.parameterSliderF(par.SliderFloat.Min, par.SliderFloat.Max, par.SliderFloat.Precision, par.Parameter))
+			root.AddChild(ui.parameterSliderF(par.Parameter, par.Units, par.SliderFloat))
 		}
 		if par.SliderInt != nil {
-			root.AddChild(ui.parameterSliderI(par.SliderInt.Min, par.SliderInt.Max, par.Parameter))
+			root.AddChild(ui.parameterSliderI(par.Parameter, par.Units, par.SliderInt))
 		}
 		if par.Toggle != nil {
 			root.AddChild(ui.parameterToggle(par.Parameter))

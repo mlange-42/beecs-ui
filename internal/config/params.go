@@ -8,6 +8,7 @@ type ParameterSection struct {
 type Parameter struct {
 	Template    string
 	Parameter   string
+	Units       string
 	SliderInt   *SliderInt
 	SliderFloat *SliderFloat
 	Toggle      *Toggle
