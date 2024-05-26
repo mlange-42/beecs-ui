@@ -3,6 +3,8 @@ package game
 import (
 	"embed"
 	"log"
+	"path"
+	"path/filepath"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	arche "github.com/mlange-42/arche-model/model"
@@ -17,34 +19,54 @@ const TPS = 30
 
 var GameData embed.FS
 
-func Run(data embed.FS) {
+func Run(data embed.FS, paramsFile string) {
 	GameData = data
 
 	game := NewGame(nil)
 	game.Initialize()
 
-	initGame(&game, map[string]any{})
+	if err := initGame(&game, paramsFile, map[string]any{}); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := game.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func run(g *Game, parameters map[string]any) {
-	if err := initGame(g, parameters); err != nil {
+func run(g *Game, paramsFile string, overwriteParams map[string]any) {
+	if err := initGame(g, paramsFile, overwriteParams); err != nil {
 		panic(err)
 	}
 }
 
-func initGame(g *Game, parameters map[string]any) error {
+func initGame(g *Game, paramsFile string, overwriteParams map[string]any) error {
 	ebiten.SetVsyncEnabled(true)
 	ebiten.SetTPS(TPS)
 
 	g.Reset()
 	g.Model = arche.New()
 
-	p := params.Default()
-	p.Termination.MaxTicks = 0
+	p := params.CustomParams{
+		Parameters: params.Default(),
+	}
+	if paramsFile != "" {
+		err := p.FromJSON(paramsFile)
+		if err != nil {
+			return err
+		}
+		dir := filepath.Dir(paramsFile)
+		if p.Parameters.InitialPatches.File != "" {
+			p.Parameters.InitialPatches.File = path.Join(dir, p.Parameters.InitialPatches.File)
+		}
+		if !p.Parameters.ForagingPeriod.Builtin {
+			for i, f := range p.Parameters.ForagingPeriod.Files {
+				p.Parameters.ForagingPeriod.Files[i] = path.Join(dir, f)
+			}
+		}
+	}
+
+	p.Parameters.Termination.MaxTicks = 0
 
 	model.Default(&p, g.Model)
 
@@ -65,7 +87,7 @@ func initGame(g *Game, parameters map[string]any) error {
 	fonts := res.NewFonts(GameData, "data/fonts")
 	ecs.AddResource(&g.Model.World, &fonts)
 
-	for name, value := range parameters {
+	for name, value := range overwriteParams {
 		err := model.SetParameter(&g.Model.World, name, value)
 		if err != nil {
 			return err
@@ -74,7 +96,7 @@ func initGame(g *Game, parameters map[string]any) error {
 
 	g.Model.AddSystem(&sys.InitUI{
 		ResetFn: func(parameters map[string]any) {
-			run(g, parameters)
+			run(g, paramsFile, parameters)
 		},
 		GameData: GameData,
 		Layout:   "default",
