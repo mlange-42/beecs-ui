@@ -2,11 +2,11 @@ package sys
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/mlange-42/arche/ecs"
 	"github.com/mlange-42/beecs-ui/game/res"
 	"github.com/mlange-42/beecs-ui/game/ui"
+	"github.com/mlange-42/beecs/util"
 )
 
 // UpdateUI system.
@@ -27,7 +27,7 @@ func (s *UpdateUI) Initialize(world *ecs.World) {
 func (s *UpdateUI) Update(world *ecs.World) {
 	tick := s.time.Tick
 
-	date := time.Date(0, time.January, 1, 0, 0, 0, 0, time.UTC).Add(time.Hour * 24 * time.Duration(tick))
+	date := util.TickToDate(tick)
 
 	s.ui.InfoLabel.Label = fmt.Sprintf("Tick %5d  %s", tick, date.Format("Jan _2 06"))
 	if s.speed.Pause {
