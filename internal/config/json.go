@@ -7,7 +7,7 @@ import (
 	"io/fs"
 	"reflect"
 
-	"github.com/mlange-42/beecs-ui/game/plot"
+	"github.com/mlange-42/beecs-ui/internal/plot"
 	"github.com/mlange-42/beecs-ui/registry"
 )
 

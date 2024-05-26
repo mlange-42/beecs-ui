@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/mlange-42/arche/ecs"
-	"github.com/mlange-42/beecs-ui/game/res"
-	"github.com/mlange-42/beecs-ui/game/ui"
+	"github.com/mlange-42/beecs-ui/internal/res"
+	"github.com/mlange-42/beecs-ui/internal/ui"
 	"github.com/mlange-42/beecs/util"
 )
 

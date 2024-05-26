@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/mlange-42/beecs-ui/game"
+	game "github.com/mlange-42/beecs-ui/internal"
 )
 
 func Run() {

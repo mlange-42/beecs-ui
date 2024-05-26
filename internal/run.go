@@ -8,8 +8,8 @@ import (
 	arche "github.com/mlange-42/arche-model/model"
 	"github.com/mlange-42/arche/ecs"
 	"github.com/mlange-42/beecs-ui/data"
-	"github.com/mlange-42/beecs-ui/game/res"
-	"github.com/mlange-42/beecs-ui/game/sys"
+	"github.com/mlange-42/beecs-ui/internal/res"
+	"github.com/mlange-42/beecs-ui/internal/sys"
 	"github.com/mlange-42/beecs/model"
 	"github.com/mlange-42/beecs/params"
 )

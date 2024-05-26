@@ -7,7 +7,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/mlange-42/arche/ecs"
 	"github.com/mlange-42/arche/generic"
-	"github.com/mlange-42/beecs-ui/game/res"
+	"github.com/mlange-42/beecs-ui/internal/res"
 )
 
 // GameControls system.

@@ -3,8 +3,8 @@ package sys
 import (
 	"github.com/mlange-42/arche/ecs"
 	"github.com/mlange-42/arche/generic"
-	"github.com/mlange-42/beecs-ui/game/res"
-	"github.com/mlange-42/beecs-ui/game/ui"
+	"github.com/mlange-42/beecs-ui/internal/res"
+	"github.com/mlange-42/beecs-ui/internal/ui"
 )
 
 // RenderUI is a system to render the user interface.

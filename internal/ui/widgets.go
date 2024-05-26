@@ -9,7 +9,7 @@ import (
 
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/mlange-42/beecs-ui/game/config"
+	"github.com/mlange-42/beecs-ui/internal/config"
 	"github.com/mlange-42/beecs/model"
 	"gonum.org/v1/plot/vg"
 	"gonum.org/v1/plot/vg/vgimg"

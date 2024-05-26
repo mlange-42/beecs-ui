@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/mlange-42/beecs-ui/game/plot"
+	"github.com/mlange-42/beecs-ui/internal/plot"
 	"github.com/mlange-42/beecs/obs"
 	"github.com/mlange-42/beecs/registry"
 )
