@@ -101,7 +101,7 @@ func (ui *UI) slider(min, max, value int, width int, stretchRow bool, handler fu
 	return slider
 }
 
-func (ui *UI) parameterSliderF(min, max float64, precision float64, parameter string) *widget.Container {
+func (ui *UI) parameterSliderF(parameter string, units string, conf *config.SliderFloat) *widget.Container {
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		rowLayout(widget.DirectionVertical, 4, 4),
@@ -142,12 +142,13 @@ func (ui *UI) parameterSliderF(min, max float64, precision float64, parameter st
 	if !ok {
 		log.Fatal("error converting parameter value to float")
 	}
-	valueLabel.Label = strconv.FormatFloat(vv, 'f', -1, 64)
-	value := int(vv * precision)
-	slider := ui.slider(int(min*precision), int(max*precision), value, 0, true, func(args *widget.SliderChangedEventArgs) {
-		v := float64(args.Current) / precision
+
+	valueLabel.Label = strconv.FormatFloat(vv, 'f', -1, 64) + units
+	value := int(vv * conf.Precision)
+	slider := ui.slider(int(conf.Min*conf.Precision), int(conf.Max*conf.Precision), value, 0, true, func(args *widget.SliderChangedEventArgs) {
+		v := float64(args.Current) / conf.Precision
 		err := model.SetParameter(ui.world, parameter, v)
-		valueLabel.Label = strconv.FormatFloat(v, 'f', -1, 64)
+		valueLabel.Label = strconv.FormatFloat(v, 'f', -1, 64) + units
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -164,13 +165,13 @@ func (ui *UI) parameterSliderF(min, max float64, precision float64, parameter st
 	ui.properties = append(ui.properties, &SliderPropertyFloat{
 		name:      parameter,
 		slider:    slider,
-		precision: precision,
+		precision: conf.Precision,
 	})
 
 	return root
 }
 
-func (ui *UI) parameterSliderI(min, max int, parameter string) *widget.Container {
+func (ui *UI) parameterSliderI(parameter string, units string, conf *config.SliderInt) *widget.Container {
 	root := widget.NewContainer(
 		widget.ContainerOpts.BackgroundImage(ui.sprites.Background),
 		rowLayout(widget.DirectionVertical, 4, 4),
@@ -211,10 +212,11 @@ func (ui *UI) parameterSliderI(min, max int, parameter string) *widget.Container
 	if !ok {
 		log.Fatal("error converting parameter value to int")
 	}
-	valueLabel.Label = strconv.Itoa(int(value))
-	slider := ui.slider(min, max, int(value), 0, true, func(args *widget.SliderChangedEventArgs) {
+
+	valueLabel.Label = strconv.Itoa(int(value)) + units
+	slider := ui.slider(conf.Min, conf.Max, int(value), 0, true, func(args *widget.SliderChangedEventArgs) {
 		err := model.SetParameter(ui.world, parameter, args.Current)
-		valueLabel.Label = strconv.Itoa(args.Current)
+		valueLabel.Label = strconv.Itoa(args.Current) + units
 		if err != nil {
 			log.Fatal(err)
 		}

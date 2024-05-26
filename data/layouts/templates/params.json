@@ -19,6 +19,7 @@
     },
     "params.HandlingTime.NectarGathering": {
         "Parameter": "params.HandlingTime.NectarGathering",
+        "Units": "s",
         "SliderFloat": {
             "Min":       60,
             "Max":       3600,
@@ -27,6 +28,7 @@
     },
     "params.HandlingTime.PollenGathering": {
         "Parameter": "params.HandlingTime.PollenGathering",
+        "Units": "s",
         "SliderFloat": {
             "Min":       60,
             "Max":       3600,
