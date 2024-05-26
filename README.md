@@ -6,6 +6,13 @@
 
 Graphical user interface for the [beecs](https://github.com/mlange-42/beecs) honeybee model and derivatives.
 
+![beecs-ui screenshot](https://github.com/mlange-42/beecs-ui/assets/44003176/a8897dbd-4608-4d74-88da-08e78ee68c1c)
+
+## Web version
+
+A web version of the model UI can be used on https://mlange-42.github.io/beecs-ui/.
+However, for best performance and configuration options we recommend local use. See below.
+
 ## Installation
 
 Pre-compiled binaries for Linux, Windows and MacOS are available in the [Releases](https://github.com/mlange-42/beecs-ui/releases).
@@ -24,8 +31,14 @@ Simply run the executable via double click or with
 beecs-ui
 ```
 
-To load a parameter file, pass it as the only argument:
+To load a parameter file, use the `-p` option:
 
 ```
-beecs-ui path/to/params.json
+beecs-ui -p path/to/params.json
+```
+
+To run with a custom layout, use the `-l` option:
+
+```
+beecs-ui -l path/to/layout.json
 ```

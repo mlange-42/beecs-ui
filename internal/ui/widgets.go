@@ -80,13 +80,13 @@ func (ui *UI) slider(min, max, value int, width int, stretchRow bool, handler fu
 		),
 		widget.SliderOpts.Images(
 			&widget.SliderTrackImage{
-				Idle:  ui.sprites.BackgroundHover,
-				Hover: ui.sprites.BackgroundHover,
+				Idle:  ui.sprites.BackgroundPressed,
+				Hover: ui.sprites.BackgroundPressed,
 			},
 			&widget.ButtonImage{
-				Idle:    ui.sprites.BackgroundPressed,
-				Hover:   ui.sprites.BackgroundPressed,
-				Pressed: ui.sprites.BackgroundPressed,
+				Idle:    ui.sprites.BackgroundHover,
+				Hover:   ui.sprites.BackgroundHover,
+				Pressed: ui.sprites.BackgroundHover,
 			},
 		),
 		widget.SliderOpts.FixedHandleSize(6),

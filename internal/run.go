@@ -16,11 +16,11 @@ import (
 
 const TPS = 30
 
-func Run(paramsFile string) {
+func Run(layout string, paramsFile string) {
 	game := NewGame(nil)
 	game.Initialize()
 
-	if err := initGame(&game, paramsFile, map[string]any{}); err != nil {
+	if err := initGame(&game, layout, paramsFile, map[string]any{}); err != nil {
 		log.Fatal(err)
 	}
 
@@ -29,13 +29,13 @@ func Run(paramsFile string) {
 	}
 }
 
-func run(g *Game, paramsFile string, overwriteParams map[string]any) {
-	if err := initGame(g, paramsFile, overwriteParams); err != nil {
+func run(g *Game, layout string, paramsFile string, overwriteParams map[string]any) {
+	if err := initGame(g, layout, paramsFile, overwriteParams); err != nil {
 		panic(err)
 	}
 }
 
-func initGame(g *Game, paramsFile string, overwriteParams map[string]any) error {
+func initGame(g *Game, layout string, paramsFile string, overwriteParams map[string]any) error {
 	ebiten.SetVsyncEnabled(true)
 	ebiten.SetTPS(TPS)
 
@@ -83,10 +83,10 @@ func initGame(g *Game, paramsFile string, overwriteParams map[string]any) error 
 
 	g.Model.AddSystem(&sys.InitUI{
 		ResetFn: func(parameters map[string]any) {
-			run(g, paramsFile, parameters)
+			run(g, layout, paramsFile, parameters)
 		},
 		LayoutData: data.Layouts,
-		Layout:     "default",
+		Layout:     layout,
 	})
 
 	g.Systems = append(g.Systems, &sys.UpdateUI{})

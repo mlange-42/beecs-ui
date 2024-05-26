@@ -2,23 +2,59 @@ package cli
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	game "github.com/mlange-42/beecs-ui/internal"
+	"github.com/mlange-42/beecs/params"
+	"github.com/spf13/cobra"
 )
 
 func Run() {
-	var parFile string
+	if err := rootCommand().Execute(); err != nil {
+		fmt.Printf("ERROR: %s\n", err.Error())
+		fmt.Print("\nRun `beecs-ui -h` for help!\n\n")
+		os.Exit(1)
+	}
+}
 
-	switch len(os.Args) {
-	case 1:
-		fmt.Println("Optionally, provide a parameter file to load as argument")
-	case 2:
-		parFile = os.Args[1]
-	default:
-		log.Fatal(fmt.Errorf("expects zero or one arguments, got %d", len(os.Args)-1))
+// rootCommand sets up the CLI
+func rootCommand() *cobra.Command {
+	var paramFile string
+	var layout string
+
+	root := cobra.Command{
+		Use:           "beecs-ui",
+		Short:         "beecs-ui provides a graphical user interface for the beecs model.",
+		Long:          `beecs-ui provides a graphical user interface for the beecs model.`,
+		SilenceUsage:  true,
+		SilenceErrors: true,
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			p := params.CustomParams{
+				Parameters: params.Default(),
+			}
+			if paramFile != "" {
+				err := p.FromJSON(paramFile)
+				if err != nil {
+					return err
+				}
+			}
+
+			game.Run(layout, paramFile)
+
+			return nil
+		},
 	}
 
-	game.Run(parFile)
+	root.Flags().StringVarP(&paramFile, "parameters", "p", "",
+		"Parameter file")
+
+	root.Flags().StringVarP(&layout, "layout", "l", "default",
+		"Layout or layout file")
+
+	root.Flags().SortFlags = false
+
+	return &root
 }
