@@ -3,13 +3,14 @@ package game
 import (
 	"embed"
 	"log"
+	"path"
+	"path/filepath"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	arche "github.com/mlange-42/arche-model/model"
 	"github.com/mlange-42/arche/ecs"
 	"github.com/mlange-42/beecs-ui/game/res"
 	"github.com/mlange-42/beecs-ui/game/sys"
-	"github.com/mlange-42/beecs-ui/game/util"
 	"github.com/mlange-42/beecs/model"
 	"github.com/mlange-42/beecs/params"
 )
@@ -49,10 +50,19 @@ func initGame(g *Game, paramsFile string, overwriteParams map[string]any) error 
 	p := params.CustomParams{
 		Parameters: params.Default(),
 	}
-	if util.FileExists(paramsFile) {
+	if paramsFile != "" {
 		err := p.FromJSON(paramsFile)
 		if err != nil {
 			return err
+		}
+		dir := filepath.Dir(paramsFile)
+		if p.Parameters.InitialPatches.File != "" {
+			p.Parameters.InitialPatches.File = path.Join(dir, p.Parameters.InitialPatches.File)
+		}
+		if !p.Parameters.ForagingPeriod.Builtin {
+			for i, f := range p.Parameters.ForagingPeriod.Files {
+				p.Parameters.ForagingPeriod.Files[i] = path.Join(dir, f)
+			}
 		}
 	}
 
