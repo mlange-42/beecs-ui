@@ -8,6 +8,7 @@ require (
 	github.com/mlange-42/arche v0.13.0
 	github.com/mlange-42/arche-model v0.9.0
 	github.com/mlange-42/beecs v0.1.1-0.20240526183013-f77fe5ce9ab9
+	github.com/spf13/cobra v1.8.0
 	golang.org/x/image v0.15.0
 	gonum.org/v1/plot v0.14.0
 )
@@ -21,8 +22,10 @@ require (
 	github.com/go-latex/latex v0.0.0-20231108140139-5c1ce85aa4ea // indirect
 	github.com/go-pdf/fpdf v0.9.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jezek/xgb v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 // indirect
 	golang.org/x/exp/shiny v0.0.0-20240222234643-814bf88cf225 // indirect
 	golang.org/x/mobile v0.0.0-20240213143359-d1f7d3436075 // indirect

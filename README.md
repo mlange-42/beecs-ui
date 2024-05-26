@@ -24,8 +24,14 @@ Simply run the executable via double click or with
 beecs-ui
 ```
 
-To load a parameter file, pass it as the only argument:
+To load a parameter file, use the `-p` option:
 
 ```
-beecs-ui path/to/params.json
+beecs-ui -p path/to/params.json
+```
+
+To run with a custom layout, use the `-l` option:
+
+```
+beecs-ui -l path/to/layout.json
 ```

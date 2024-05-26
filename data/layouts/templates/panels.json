@@ -94,5 +94,18 @@
             "DrawInterval": 5
         },
         "Observer": "obs.PatchPollen"
+    },
+    "obs.ForagingPeriod": {
+        "Drawer": "plot.TimeSeries",
+        "DrawerConfig": {
+            "Labels": {
+                "Title": "Foraging period",
+                "X":     "Time [d]",
+                "Y":     "Daily foraging [h]"
+            },
+            "MaxRows":      730,
+            "DrawInterval": 5
+        },
+        "Observer": "obs.ForagingPeriod"
     }
 }
