@@ -6,6 +6,8 @@
 
 Graphical user interface for the [beecs](https://github.com/mlange-42/beecs) honeybee model and derivatives.
 
+![beecs-ui screenshot](https://github.com/mlange-42/beecs-ui/assets/44003176/a8897dbd-4608-4d74-88da-08e78ee68c1c)
+
 ## Web version
 
 A web version of the model UI can be used on https://mlange-42.github.io/beecs-ui/.
