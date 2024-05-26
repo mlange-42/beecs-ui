@@ -56,7 +56,7 @@ func (l *Lines) Initialize(w *ecs.World, obs any) error {
 	} else {
 		l.xIndex, ok = find(l.headers, l.X)
 		if !ok {
-			panic(fmt.Sprintf("x column '%s' not found", l.X))
+			return fmt.Errorf("x column '%s' not found", l.X)
 		}
 	}
 
@@ -72,7 +72,7 @@ func (l *Lines) Initialize(w *ecs.World, obs any) error {
 		for i, y := range l.Y {
 			l.yIndices[i], ok = find(l.headers, y)
 			if !ok {
-				panic(fmt.Sprintf("y column '%s' not found", y))
+				return fmt.Errorf("y column '%s' not found", y)
 			}
 		}
 	}
