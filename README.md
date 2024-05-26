@@ -6,6 +6,11 @@
 
 Graphical user interface for the [beecs](https://github.com/mlange-42/beecs) honeybee model and derivatives.
 
+## Web version
+
+A web version of the model UI can be used on https://mlange-42.github.io/beecs-ui/.
+However, for best performance and configuration options we recommend local use. See below.
+
 ## Installation
 
 Pre-compiled binaries for Linux, Windows and MacOS are available in the [Releases](https://github.com/mlange-42/beecs-ui/releases).
