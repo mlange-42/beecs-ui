@@ -56,10 +56,10 @@ func New(world *ecs.World, data fs.FS, layout string, resetFn func(parameters ma
 	var err error
 	if strings.HasSuffix(layout, ".json") {
 		lay, err = config.FromFile(os.DirFS("."), layout,
-			data, "data/layouts/templates/params.json", "data/layouts/templates/panels.json")
+			data, "layouts/templates/params.json", "layouts/templates/panels.json")
 	} else {
-		lay, err = config.FromFile(data, fmt.Sprintf("data/layouts/%s.json", layout),
-			data, "data/layouts/templates/params.json", "data/layouts/templates/panels.json")
+		lay, err = config.FromFile(data, fmt.Sprintf("layouts/%s.json", layout),
+			data, "layouts/templates/params.json", "layouts/templates/panels.json")
 	}
 	if err != nil {
 		log.Fatal(err)

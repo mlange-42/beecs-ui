@@ -1,13 +1,13 @@
 package game
 
 import (
-	"embed"
 	"log"
 	"path/filepath"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	arche "github.com/mlange-42/arche-model/model"
 	"github.com/mlange-42/arche/ecs"
+	"github.com/mlange-42/beecs-ui/data"
 	"github.com/mlange-42/beecs-ui/game/res"
 	"github.com/mlange-42/beecs-ui/game/sys"
 	"github.com/mlange-42/beecs/model"
@@ -16,11 +16,7 @@ import (
 
 const TPS = 30
 
-var GameData embed.FS
-
-func Run(data embed.FS, paramsFile string) {
-	GameData = data
-
+func Run(paramsFile string) {
 	game := NewGame(nil)
 	game.Initialize()
 
@@ -72,10 +68,10 @@ func initGame(g *Game, paramsFile string, overwriteParams map[string]any) error 
 	ecs.AddResource(&g.Model.World, &g.Screen)
 	ecs.AddResource(&g.Model.World, &g.Mouse)
 
-	sprites := res.NewSprites(GameData, "data/images")
+	sprites := res.NewSprites(data.Images, "images")
 	ecs.AddResource(&g.Model.World, &sprites)
 
-	fonts := res.NewFonts(GameData, "data/fonts")
+	fonts := res.NewFonts(data.Fonts, "fonts")
 	ecs.AddResource(&g.Model.World, &fonts)
 
 	for name, value := range overwriteParams {
@@ -89,8 +85,8 @@ func initGame(g *Game, paramsFile string, overwriteParams map[string]any) error 
 		ResetFn: func(parameters map[string]any) {
 			run(g, paramsFile, parameters)
 		},
-		GameData: GameData,
-		Layout:   "default",
+		LayoutData: data.Layouts,
+		Layout:     "default",
 	})
 
 	g.Systems = append(g.Systems, &sys.UpdateUI{})

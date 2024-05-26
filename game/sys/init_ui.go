@@ -9,15 +9,15 @@ import (
 
 // InitUI system.
 type InitUI struct {
-	ResetFn  func(parameters map[string]any)
-	GameData fs.FS
-	Layout   string
-	ui       ui.UI
+	ResetFn    func(parameters map[string]any)
+	LayoutData fs.FS
+	Layout     string
+	ui         ui.UI
 }
 
 // Initialize the system
 func (s *InitUI) Initialize(world *ecs.World) {
-	s.ui = ui.New(world, s.GameData, s.Layout, s.ResetFn)
+	s.ui = ui.New(world, s.LayoutData, s.Layout, s.ResetFn)
 
 	ecs.AddResource(world, &s.ui)
 }
