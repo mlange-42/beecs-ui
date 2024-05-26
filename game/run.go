@@ -3,7 +3,6 @@ package game
 import (
 	"embed"
 	"log"
-	"path"
 	"path/filepath"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -55,15 +54,7 @@ func initGame(g *Game, paramsFile string, overwriteParams map[string]any) error 
 		if err != nil {
 			return err
 		}
-		dir := filepath.Dir(paramsFile)
-		if p.Parameters.InitialPatches.File != "" {
-			p.Parameters.InitialPatches.File = path.Join(dir, p.Parameters.InitialPatches.File)
-		}
-		if !p.Parameters.ForagingPeriod.Builtin {
-			for i, f := range p.Parameters.ForagingPeriod.Files {
-				p.Parameters.ForagingPeriod.Files[i] = path.Join(dir, f)
-			}
-		}
+		p.Parameters.WorkingDirectory.Path = filepath.Dir(paramsFile)
 	}
 
 	p.Parameters.Termination.MaxTicks = 0

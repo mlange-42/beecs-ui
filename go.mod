@@ -6,8 +6,8 @@ require (
 	github.com/ebitenui/ebitenui v0.5.6-0.20240306013559-bea9affc3db0
 	github.com/hajimehoshi/ebiten/v2 v2.6.6
 	github.com/mlange-42/arche v0.13.0
-	github.com/mlange-42/arche-model v0.8.2-0.20240523143440-11595cc41e11
-	github.com/mlange-42/beecs v0.1.1-0.20240525234846-9103ab3c201b
+	github.com/mlange-42/arche-model v0.9.0
+	github.com/mlange-42/beecs v0.1.1-0.20240526171228-7a65685f7d86
 	golang.org/x/image v0.15.0
 	gonum.org/v1/plot v0.14.0
 )
