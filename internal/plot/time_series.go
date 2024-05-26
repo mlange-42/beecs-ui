@@ -65,7 +65,7 @@ func (t *TimeSeries) Initialize(w *ecs.World, obs any) error {
 		for i := 0; i < len(t.indices); i++ {
 			t.indices[i], ok = find(t.headers, t.Columns[i])
 			if !ok {
-				panic(fmt.Sprintf("column '%s' not found", t.Columns[i]))
+				return fmt.Errorf("column '%s' not found", t.Columns[i])
 			}
 		}
 	}

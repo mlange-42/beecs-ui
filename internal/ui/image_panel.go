@@ -24,8 +24,8 @@ type ImagePanel struct {
 	canvas    *vgimg.Canvas
 }
 
-func (p *ImagePanel) Initialize(world *ecs.World) {
-	p.Drawer.Initialize(world, p.Observer)
+func (p *ImagePanel) Initialize(world *ecs.World) error {
+	return p.Drawer.Initialize(world, p.Observer)
 }
 
 func (p *ImagePanel) Update(world *ecs.World) {

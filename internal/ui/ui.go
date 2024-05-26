@@ -73,7 +73,9 @@ func New(world *ecs.World, data fs.FS, layout string, resetFn func(parameters ma
 	ui.ui = &eui
 
 	for i := range ui.images {
-		ui.images[i].Initialize(world)
+		if err := ui.images[i].Initialize(world); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return ui
