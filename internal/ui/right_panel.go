@@ -2,7 +2,7 @@ package ui
 
 import (
 	"github.com/ebitenui/ebitenui/widget"
-	"github.com/mlange-42/beecs-ui/game/config"
+	"github.com/mlange-42/beecs-ui/internal/config"
 )
 
 func (ui *UI) createRightPanel(layout *config.Layout) *widget.Container {

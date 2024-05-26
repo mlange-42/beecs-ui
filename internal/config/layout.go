@@ -1,6 +1,6 @@
 package config
 
-import "github.com/mlange-42/beecs-ui/game/plot"
+import "github.com/mlange-42/beecs-ui/internal/plot"
 
 type Layout struct {
 	Parameters []ParameterSection

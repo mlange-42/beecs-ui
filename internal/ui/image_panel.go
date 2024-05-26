@@ -7,7 +7,7 @@ import (
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/mlange-42/arche/ecs"
-	"github.com/mlange-42/beecs-ui/game/plot"
+	"github.com/mlange-42/beecs-ui/internal/plot"
 	"gonum.org/v1/plot/vg"
 	"gonum.org/v1/plot/vg/vgimg"
 )

@@ -1,1 +1,31 @@
 # beecs-ui
+
+[![Test status](https://img.shields.io/github/actions/workflow/status/mlange-42/beecs-ui/tests.yml?branch=main&label=Tests&logo=github)](https://github.com/mlange-42/beecs-ui/actions/workflows/tests.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mlange-42/beecs-ui)](https://goreportcard.com/report/github.com/mlange-42/beecs-ui)
+[![GitHub](https://img.shields.io/badge/github-repo-blue?logo=github)](https://github.com/mlange-42/beecs-ui)
+
+Graphical user interface for the [beecs](https://github.com/mlange-42/beecs) honeybee model and derivatives.
+
+## Installation
+
+Pre-compiled binaries for Linux, Windows and MacOS are available in the [Releases](https://github.com/mlange-42/beecs-ui/releases).
+
+> To install the latest **development version** using [Go](https://go.dev), run:
+> 
+> ```
+> go install github.com/mlange-42/beecs-ui@main
+> ```
+
+## Usage
+
+Simply run the executable via double click or with
+
+```
+beecs-ui
+```
+
+To load a parameter file, pass it as the only argument:
+
+```
+beecs-ui path/to/params.json
+```

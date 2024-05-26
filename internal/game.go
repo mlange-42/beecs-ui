@@ -4,7 +4,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/mlange-42/arche-model/model"
 	"github.com/mlange-42/arche/ecs"
-	"github.com/mlange-42/beecs-ui/game/res"
+	"github.com/mlange-42/beecs-ui/internal/res"
 )
 
 // Game container
