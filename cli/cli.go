@@ -10,6 +10,7 @@ import (
 )
 
 func Run() {
+	cobra.MousetrapHelpText = ""
 	if err := rootCommand().Execute(); err != nil {
 		fmt.Printf("ERROR: %s\n", err.Error())
 		fmt.Print("\nRun `beecs-ui -h` for help!\n\n")
