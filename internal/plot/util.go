@@ -74,7 +74,7 @@ type paddedTicks struct {
 func (t paddedTicks) Ticks(min, max float64) []plot.Tick {
 	ticks := t.DefaultTicks.Ticks(min, max)
 	for i := 0; i < len(ticks); i++ {
-		ticks[i].Label = fmt.Sprintf("%*s", 10, ticks[i].Label)
+		ticks[i].Label = fmt.Sprintf("%*s", 6, ticks[i].Label)
 	}
 	return ticks
 }
