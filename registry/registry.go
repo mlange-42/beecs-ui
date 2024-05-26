@@ -6,10 +6,10 @@ import (
 
 	"github.com/mlange-42/beecs-ui/game/plot"
 	"github.com/mlange-42/beecs/obs"
+	"github.com/mlange-42/beecs/registry"
 )
 
 var drawersRegistry = map[string]reflect.Type{}
-var observerRegistry = map[string]reflect.Type{}
 
 func init() {
 	RegisterObserver[obs.WorkerCohorts]()
@@ -29,11 +29,7 @@ func init() {
 }
 
 func RegisterObserver[T any]() {
-	tp := reflect.TypeOf((*T)(nil)).Elem()
-	if _, ok := observerRegistry[tp.String()]; ok {
-		panic(fmt.Sprintf("there is already an observer with type name '%s' registered", tp.String()))
-	}
-	observerRegistry[tp.String()] = tp
+	registry.RegisterObserver[T]()
 }
 
 func RegisterDrawer[T any]() {
@@ -44,12 +40,27 @@ func RegisterDrawer[T any]() {
 	drawersRegistry[tp.String()] = tp
 }
 
+func RegisterResource[T any]() {
+	registry.RegisterResource[T]()
+}
+
+func RegisterSystem[T any]() {
+	registry.RegisterSystem[T]()
+}
+
 func GetObserver(name string) (reflect.Type, bool) {
-	t, ok := observerRegistry[name]
-	return t, ok
+	return registry.GetObserver(name)
 }
 
 func GetDrawer(name string) (reflect.Type, bool) {
 	t, ok := drawersRegistry[name]
 	return t, ok
+}
+
+func GetResource(name string) (reflect.Type, bool) {
+	return registry.GetResource(name)
+}
+
+func GetSystem(name string) (reflect.Type, bool) {
+	return registry.GetSystem(name)
 }
