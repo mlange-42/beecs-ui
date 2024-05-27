@@ -26,7 +26,6 @@ type TimeSeries struct {
 	indices    []int
 	headers    []string
 	series     []plotter.XYs
-	scale      float64
 	step       int64
 	drawStep   uint64
 	hasChanged bool
@@ -72,7 +71,6 @@ func (t *TimeSeries) Initialize(w *ecs.World, obs any) error {
 
 	t.series = make([]plotter.XYs, len(t.headers))
 
-	t.scale = calcScaleCorrection()
 	t.step = 0
 
 	return nil
