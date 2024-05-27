@@ -31,7 +31,6 @@ type Lines struct {
 
 	headers []string
 	series  []plotter.XYs
-	scale   float64
 
 	drawStep   uint64
 	hasChanged bool
@@ -47,8 +46,6 @@ func (l *Lines) Initialize(w *ecs.World, obs any) error {
 	l.observer.Initialize(w)
 
 	l.headers = l.observer.Header()
-
-	l.scale = calcScaleCorrection()
 
 	var ok bool
 	if l.X == "" {
