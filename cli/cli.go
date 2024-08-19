@@ -37,7 +37,7 @@ func rootCommand() *cobra.Command {
 				Parameters: params.Default(),
 			}
 			if paramFile != "" {
-				err := p.FromJSON(paramFile)
+				err := p.FromJSONFile(paramFile)
 				if err != nil {
 					return err
 				}
