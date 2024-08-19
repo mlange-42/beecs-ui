@@ -46,7 +46,7 @@ func initGame(g *Game, layout string, paramsFile string, overwriteParams map[str
 		Parameters: params.Default(),
 	}
 	if paramsFile != "" {
-		err := p.FromJSON(paramsFile)
+		err := p.FromJSONFile(paramsFile)
 		if err != nil {
 			return err
 		}
