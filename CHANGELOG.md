@@ -1,5 +1,11 @@
 # Changelog
 
+## [[v0.2.0]](https://github.com/mlange-42/beecs-cli/compare/v0.1.3...v0.2.0)
+
+### Breaking changes
+
+- Upgrade to beecs v0.4.0, with a renamed parameter (#25)
+
 ## [[v0.1.3]](https://github.com/mlange-42/beecs-ui/compare/v0.1.2...v0.1.3)
 
 ### Other
