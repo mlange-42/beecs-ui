@@ -7,7 +7,7 @@ require (
 	github.com/hajimehoshi/ebiten/v2 v2.6.6
 	github.com/mlange-42/arche v0.13.0
 	github.com/mlange-42/arche-model v0.9.0
-	github.com/mlange-42/beecs v0.3.0
+	github.com/mlange-42/beecs v0.4.0
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/image v0.15.0
 	gonum.org/v1/plot v0.14.0

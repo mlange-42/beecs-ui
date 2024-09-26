@@ -43,8 +43,8 @@ github.com/mlange-42/arche v0.13.0 h1:ef0fu9qC2KIr8wIlVs+CgeQ5CSUJ8A1Hut6nXYdf+x
 github.com/mlange-42/arche v0.13.0/go.mod h1:bFktKnvGDj2kP01xar79z0hKwGHdnoaEZR8HWmJkIyU=
 github.com/mlange-42/arche-model v0.9.0 h1:S/qIvZNra782+nPixPkV5Ay9lAO51T1Zy7y4J62p1lo=
 github.com/mlange-42/arche-model v0.9.0/go.mod h1:unGJaXLPdDUwMoPGKlTCW8HaRFVIRFILLHSWFp/DVY4=
-github.com/mlange-42/beecs v0.3.0 h1:Co8tOrbOca85dweUq4+p0lC3LVwz7UW/u94aTcUazZw=
-github.com/mlange-42/beecs v0.3.0/go.mod h1:FfAscKKh8wE1jxtjzyr/GrmMtMxJT6zg+EvTEMuw7Ks=
+github.com/mlange-42/beecs v0.4.0 h1:dUxDDtFNVtCnAOScG6giuZHBAK+1Pt1yjpDscT6e5Mo=
+github.com/mlange-42/beecs v0.4.0/go.mod h1:FfAscKKh8wE1jxtjzyr/GrmMtMxJT6zg+EvTEMuw7Ks=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
