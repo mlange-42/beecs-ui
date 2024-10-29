@@ -43,7 +43,7 @@ func rootCommand() *cobra.Command {
 				}
 			}
 
-			game.Run(layout, paramFile)
+			game.Run(layout, paramFile, 4)
 
 			return nil
 		},

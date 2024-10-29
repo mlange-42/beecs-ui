@@ -9,7 +9,7 @@ import (
 
 // InitUI system.
 type InitUI struct {
-	ResetFn    func(parameters map[string]any)
+	ResetFn    func(parameters map[string]any, speed uint8)
 	LayoutData fs.FS
 	Layout     string
 	ui         ui.UI

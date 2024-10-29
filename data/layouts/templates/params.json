@@ -6,6 +6,14 @@
             "Max": 50000
         }
     },
+    "params.InitialStores.Honey": {
+        "Parameter": "params.InitialStores.Honey",
+        "SliderFloat": {
+            "Min": 1,
+            "Max": 50,
+            "Precision": 1
+        }
+    },
     "params.Foragers.SquadronSize": {
         "Parameter": "params.Foragers.SquadronSize",
         "SliderInt": {
