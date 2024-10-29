@@ -57,7 +57,7 @@ func (ui *UI) createTopBarButtons() *widget.Container {
 			params[p.Name()] = p.Value()
 		}
 
-		ui.resetFn(params)
+		ui.resetFn(params, uint8(speedSlider.Current))
 	})
 
 	ui.PauseButton = ui.button(">>", func(args *widget.ButtonClickedEventArgs) {

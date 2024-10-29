@@ -35,10 +35,10 @@ type UI struct {
 	gridSize      image.Point
 	layoutUpdated bool
 
-	resetFn func(parameters map[string]any)
+	resetFn func(parameters map[string]any, speed uint8)
 }
 
-func New(world *ecs.World, data fs.FS, layout string, resetFn func(parameters map[string]any)) UI {
+func New(world *ecs.World, data fs.FS, layout string, resetFn func(parameters map[string]any, speed uint8)) UI {
 	ui := UI{
 		world:   world,
 		time:    ecs.GetResource[res.GameTick](world),

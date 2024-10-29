@@ -16,11 +16,11 @@ import (
 
 const TPS = 30
 
-func Run(layout string, paramsFile string) {
+func Run(layout string, paramsFile string, speed uint8) {
 	game := NewGame(nil)
 	game.Initialize()
 
-	if err := initGame(&game, layout, paramsFile, map[string]any{}); err != nil {
+	if err := initGame(&game, layout, paramsFile, map[string]any{}, speed); err != nil {
 		log.Fatal(err)
 	}
 
@@ -29,13 +29,13 @@ func Run(layout string, paramsFile string) {
 	}
 }
 
-func run(g *Game, layout string, paramsFile string, overwriteParams map[string]any) {
-	if err := initGame(g, layout, paramsFile, overwriteParams); err != nil {
+func run(g *Game, layout string, paramsFile string, overwriteParams map[string]any, speed uint8) {
+	if err := initGame(g, layout, paramsFile, overwriteParams, speed); err != nil {
 		panic(err)
 	}
 }
 
-func initGame(g *Game, layout string, paramsFile string, overwriteParams map[string]any) error {
+func initGame(g *Game, layout string, paramsFile string, overwriteParams map[string]any, speed uint8) error {
 	ebiten.SetVsyncEnabled(true)
 	ebiten.SetTPS(TPS)
 
@@ -59,7 +59,7 @@ func initGame(g *Game, layout string, paramsFile string, overwriteParams map[str
 
 	ecs.AddResource(&g.Model.World, &res.GameSpeed{
 		Speeds:     []uint16{5, 7, 10, 15, 30, 60, 120, 240, 480, 1000, 9999},
-		SpeedIndex: 4,
+		SpeedIndex: speed,
 		Pause:      true,
 	})
 
@@ -82,8 +82,8 @@ func initGame(g *Game, layout string, paramsFile string, overwriteParams map[str
 	}
 
 	g.Model.AddSystem(&sys.InitUI{
-		ResetFn: func(parameters map[string]any) {
-			run(g, layout, paramsFile, parameters)
+		ResetFn: func(parameters map[string]any, speed uint8) {
+			run(g, layout, paramsFile, parameters, speed)
 		},
 		LayoutData: data.Layouts,
 		Layout:     layout,
