@@ -145,13 +145,16 @@ func (ui *UI) parameterSliderF(parameter string, units string, conf *config.Slid
 
 	valueLabel.Label = strconv.FormatFloat(vv, 'f', -1, 64) + units
 	value := int(vv * conf.Precision)
-	slider := ui.slider(int(conf.Min*conf.Precision), int(conf.Max*conf.Precision), value, 0, true, func(args *widget.SliderChangedEventArgs) {
-		v := float64(args.Current) / conf.Precision
+	slider := ui.slider(int(conf.Min/conf.Precision), int(conf.Max/conf.Precision), value, 0, true, func(args *widget.SliderChangedEventArgs) {
+		v := float64(args.Current) * conf.Precision
 		err := model.SetParameter(ui.world, parameter, v)
-		valueLabel.Label = strconv.FormatFloat(v, 'f', -1, 64) + units
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		prec := int(math.Ceil(-math.Log10(conf.Precision)))
+		prec = max(-1, prec)
+		valueLabel.Label = strconv.FormatFloat(v, 'f', prec, 64) + units
 	})
 
 	labels.AddChild(label)
