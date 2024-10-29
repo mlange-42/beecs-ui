@@ -1,16 +1,26 @@
 # Changelog
 
+## [[unpublished]](https://github.com/mlange-42/beecs-ui/compare/v0.2.1...main)
+
+### Other
+
+* Simulation speed settings persist on reset (#27)
+
+### Bugfixes
+
+* Fix float slider precision and number display (#28)
+
 ## [[v0.2.1]](https://github.com/mlange-42/beecs-ui/compare/v0.2.0...v0.2.1)
 
 ### Bugfixes
 
-- Upgrade beecs: fix for proper overwriting of default flower patches when reading from JSON (#26)
+* Upgrade beecs: fix for proper overwriting of default flower patches when reading from JSON (#26)
 
 ## [[v0.2.0]](https://github.com/mlange-42/beecs-ui/compare/v0.1.3...v0.2.0)
 
 ### Breaking changes
 
-- Upgrade to beecs v0.4.0, with a renamed parameter (#25)
+* Upgrade to beecs v0.4.0, with a renamed parameter (#25)
 
 ## [[v0.1.3]](https://github.com/mlange-42/beecs-ui/compare/v0.1.2...v0.1.3)
 
