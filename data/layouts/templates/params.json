@@ -14,6 +14,14 @@
             "Precision": 1
         }
     },
+    "params.Stores.DecentHoneyPerWorker": {
+        "Parameter": "params.Stores.DecentHoneyPerWorker",
+        "SliderFloat": {
+            "Min": 1.0,
+            "Max": 5.0,
+            "Precision": 0.1
+        }
+    },
     "params.Foragers.SquadronSize": {
         "Parameter": "params.Foragers.SquadronSize",
         "SliderInt": {

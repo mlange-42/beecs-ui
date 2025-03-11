@@ -1,0 +1,34 @@
+{
+    "Parameters": [
+        {
+            "Text": "Initialize",
+            "Parameters": [
+                {"Template": "params.InitialPopulation.Count"},
+                {"Template": "params.InitialStores.Honey"},
+                {"Template": "params.Stores.DecentHoneyPerWorker"}
+            ]
+        }
+    ],
+    "Rows": [
+        {
+			"Height": 300,
+			"Panels": [
+				{"Template": "obs.AgeStructure"}
+            ]
+		},
+		{
+			"Height": 260,
+			"Panels": [
+				{"Template": "obs.WorkerCohortsCumulative"},
+				{"Template": "obs.Stores"}
+			]
+		},
+		{
+			"Height": 300,
+			"Panels": [
+				{"Template": "obs.PatchNectar"},
+				{"Template": "obs.PatchPollen"}
+			]
+		}
+    ]
+}

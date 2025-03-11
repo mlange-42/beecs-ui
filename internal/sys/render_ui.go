@@ -1,22 +1,21 @@
 package sys
 
 import (
-	"github.com/mlange-42/arche/ecs"
-	"github.com/mlange-42/arche/generic"
+	"github.com/mlange-42/ark/ecs"
 	"github.com/mlange-42/beecs-ui/internal/res"
 	"github.com/mlange-42/beecs-ui/internal/ui"
 )
 
 // RenderUI is a system to render the user interface.
 type RenderUI struct {
-	screen generic.Resource[res.Screen]
-	ui     generic.Resource[ui.UI]
+	screen ecs.Resource[res.Screen]
+	ui     ecs.Resource[ui.UI]
 }
 
 // InitializeUI the system
 func (s *RenderUI) InitializeUI(world *ecs.World) {
-	s.ui = generic.NewResource[ui.UI](world)
-	s.screen = generic.NewResource[res.Screen](world)
+	s.ui = ecs.NewResource[ui.UI](world)
+	s.screen = ecs.NewResource[res.Screen](world)
 }
 
 // UpdateUI the system
