@@ -5,8 +5,8 @@ go 1.24.0
 require (
 	github.com/ebitenui/ebitenui v0.6.1
 	github.com/hajimehoshi/ebiten/v2 v2.8.6
-	github.com/mlange-42/ark v0.3.1-0.20250311114501-f1a1df3dea57
-	github.com/mlange-42/ark-tools v0.1.2
+	github.com/mlange-42/ark v0.4.0
+	github.com/mlange-42/ark-tools v0.1.3
 	github.com/mlange-42/beecs v0.4.1
 	github.com/spf13/cobra v1.9.1
 	golang.org/x/image v0.25.0
