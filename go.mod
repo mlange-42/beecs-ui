@@ -13,8 +13,6 @@ require (
 	gonum.org/v1/plot v0.15.2
 )
 
-replace github.com/mlange-42/beecs v0.4.1 => ../beecs
-
 require (
 	codeberg.org/go-fonts/liberation v0.4.1 // indirect
 	codeberg.org/go-latex/latex v0.0.1 // indirect
