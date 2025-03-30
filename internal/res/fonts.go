@@ -5,7 +5,7 @@ import (
 	"log"
 	"path"
 
-	"github.com/hajimehoshi/ebiten/v2/text"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
 	"golang.org/x/image/font/sfnt"
@@ -17,7 +17,7 @@ const fontSize = 18
 
 // Fonts resource for access to UI fonts.
 type Fonts struct {
-	Default font.Face
+	Default text.Face
 }
 
 func NewFonts(fSys fs.FS, dir string) Fonts {
@@ -40,7 +40,7 @@ func NewFonts(fSys fs.FS, dir string) Fonts {
 	}
 }
 
-func makeSize(tt *sfnt.Font, size int) (font.Face, error) {
+func makeSize(tt *sfnt.Font, size int) (text.Face, error) {
 	const dpi = 72
 	fontFace, err := opentype.NewFace(tt, &opentype.FaceOptions{
 		Size:    float64(size),
@@ -50,6 +50,7 @@ func makeSize(tt *sfnt.Font, size int) (font.Face, error) {
 	if err != nil {
 		return nil, err
 	}
-	fontFace = text.FaceWithLineHeight(fontFace, float64(size))
-	return fontFace, nil
+	goFont := text.NewGoXFace(fontFace)
+	//goFont = text.FaceWithLineHeight(goFont, float64(size))
+	return goFont, nil
 }

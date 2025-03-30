@@ -3,8 +3,8 @@ package plot
 import (
 	"fmt"
 
-	"github.com/mlange-42/arche-model/observer"
-	"github.com/mlange-42/arche/ecs"
+	"github.com/mlange-42/ark-tools/observer"
+	"github.com/mlange-42/ark/ecs"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg/draw"

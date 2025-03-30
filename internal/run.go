@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	arche "github.com/mlange-42/arche-model/model"
-	"github.com/mlange-42/arche/ecs"
+	"github.com/mlange-42/ark-tools/app"
+	"github.com/mlange-42/ark/ecs"
 	"github.com/mlange-42/beecs-ui/data"
 	"github.com/mlange-42/beecs-ui/internal/res"
 	"github.com/mlange-42/beecs-ui/internal/sys"
@@ -40,7 +40,7 @@ func initGame(g *Game, layout string, paramsFile string, overwriteParams map[str
 	ebiten.SetTPS(TPS)
 
 	g.Reset()
-	g.Model = arche.New()
+	g.Model = app.New()
 
 	p := params.CustomParams{
 		Parameters: params.Default(),

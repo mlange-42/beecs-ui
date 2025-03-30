@@ -5,8 +5,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
-	"github.com/mlange-42/arche/ecs"
-	"github.com/mlange-42/arche/generic"
+	"github.com/mlange-42/ark/ecs"
 	"github.com/mlange-42/beecs-ui/internal/res"
 )
 
@@ -18,8 +17,8 @@ type GameControls struct {
 	FasterKey     rune
 	FullscreenKey ebiten.Key
 
-	time      generic.Resource[res.GameTick]
-	speed     generic.Resource[res.GameSpeed]
+	time      ecs.Resource[res.GameTick]
+	speed     ecs.Resource[res.GameSpeed]
 	prevSpeed uint8
 
 	inputChars []rune
@@ -27,8 +26,8 @@ type GameControls struct {
 
 // Initialize the system
 func (s *GameControls) Initialize(world *ecs.World) {
-	s.time = generic.NewResource[res.GameTick](world)
-	s.speed = generic.NewResource[res.GameSpeed](world)
+	s.time = ecs.NewResource[res.GameTick](world)
+	s.speed = ecs.NewResource[res.GameSpeed](world)
 
 	speed := s.speed.Get()
 

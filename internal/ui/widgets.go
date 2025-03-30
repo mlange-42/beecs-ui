@@ -279,10 +279,10 @@ func (ui *UI) parameterToggle(parameter string) *widget.Container {
 			widget.ButtonOpts.Image(ui.defaultButtonImage()),
 		),
 		widget.CheckboxOpts.Image(&widget.CheckboxGraphicImage{
-			Unchecked: &widget.ButtonImageImage{
+			Unchecked: &widget.GraphicImage{
 				Idle: uncheckedImage,
 			},
-			Checked: &widget.ButtonImageImage{
+			Checked: &widget.GraphicImage{
 				Idle: checkedImage,
 			},
 		}),

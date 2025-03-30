@@ -1,7 +1,7 @@
 package plot
 
 import (
-	"github.com/mlange-42/arche/ecs"
+	"github.com/mlange-42/ark/ecs"
 	"gonum.org/v1/plot/vg/vgimg"
 )
 
