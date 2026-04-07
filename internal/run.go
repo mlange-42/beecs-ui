@@ -57,25 +57,25 @@ func initGame(g *Game, layout string, paramsFile string, overwriteParams map[str
 
 	model.Default(&p, g.Model)
 
-	ecs.AddResource(&g.Model.World, &res.GameSpeed{
+	ecs.AddResource(g.Model.World, &res.GameSpeed{
 		Speeds:     []uint16{5, 7, 10, 15, 30, 60, 120, 240, 480, 1000, 9999},
 		SpeedIndex: speed,
 		Pause:      true,
 	})
 
-	ecs.AddResource(&g.Model.World, &res.GameTick{})
+	ecs.AddResource(g.Model.World, &res.GameTick{})
 
-	ecs.AddResource(&g.Model.World, &g.Screen)
-	ecs.AddResource(&g.Model.World, &g.Mouse)
+	ecs.AddResource(g.Model.World, &g.Screen)
+	ecs.AddResource(g.Model.World, &g.Mouse)
 
 	sprites := res.NewSprites(data.Images, "images")
-	ecs.AddResource(&g.Model.World, &sprites)
+	ecs.AddResource(g.Model.World, &sprites)
 
 	fonts := res.NewFonts(data.Fonts, "fonts")
-	ecs.AddResource(&g.Model.World, &fonts)
+	ecs.AddResource(g.Model.World, &fonts)
 
 	for name, value := range overwriteParams {
-		err := model.SetParameter(&g.Model.World, name, value)
+		err := model.SetParameter(g.Model.World, name, value)
 		if err != nil {
 			return err
 		}
