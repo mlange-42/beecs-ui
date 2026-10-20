@@ -1,6 +1,6 @@
 # Changelog
 
-## [[unpublished]](https://github.com/mlange-42/beecs-ui/compare/v0.2.1...main)
+## [[v0.2.2]](https://github.com/mlange-42/beecs-ui/compare/v0.2.1...v0.2.2)
 
 ### Other
 
