@@ -37,9 +37,9 @@ func (g *Game) Initialize() {
 
 // Initialize a new run.
 func (g *Game) InitializeRun() {
-	g.gameSpeed = ecs.GetResource[res.GameSpeed](&g.Model.World)
+	g.gameSpeed = ecs.GetResource[res.GameSpeed](g.Model.World)
 	for _, sys := range g.Systems {
-		sys.Initialize(&g.Model.World)
+		sys.Initialize(g.Model.World)
 	}
 }
 
@@ -66,7 +66,7 @@ func (g *Game) Update() error {
 	}
 
 	for _, sys := range g.Systems {
-		sys.Update(&g.Model.World)
+		sys.Update(g.Model.World)
 	}
 
 	return nil
